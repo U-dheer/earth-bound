@@ -10,6 +10,9 @@ import { UserModule } from './modules/user/user.module';
 import { BussinessModule } from './modules/bussiness/bussiness.module';
 import { OrganizerModule } from './modules/organizer/organizer.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { CsrProjectModule } from './modules/csr-project/csr-project.module';
+import { OfferModule } from './modules/offer/offer.module';
+import { DonationModule } from './modules/donation/donation.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { AdminModule } from './modules/admin/admin.module';
     BussinessModule,
     OrganizerModule,
     AdminModule,
+    CsrProjectModule,
+    OfferModule,
+    DonationModule,
   ],
   controllers: [AppController],
   providers: [ConfigService, AppService],

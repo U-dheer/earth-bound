@@ -6,6 +6,7 @@ import {
   timestamp,
   jsonb,
 } from 'drizzle-orm/pg-core';
+import { organizers } from 'src/modules/organizer/infrastructure/schema/organizer.schema';
 
 export const csrEvents = pgTable('csr_events', {
   id: uuid('id').primaryKey().defaultRandom(), // gen_random_uuid()
@@ -18,19 +19,13 @@ export const csrEvents = pgTable('csr_events', {
 
   endDate: timestamp('end_date', { withTimezone: false }).notNull(),
 
-  /**
-   * Stored as JSONB: [longitude, latitude]
-   * Example: [80.7718, 7.8731]
-   */
   location: jsonb('location').$type<[number, number] | null>(),
 
   isApproved: boolean('is_approved').notNull().default(false),
 
-  /**
-   * Organizer metadata
-   * Example: { name: "ABC Org", contact: "0771234567" }
-   */
-  organizer: jsonb('organizer').$type<Record<string, unknown> | null>(),
+  organizer_id: uuid('organizer_id')
+    .notNull()
+    .references(() => organizers.organizer_id, { onDelete: 'cascade' }),
 
   createdAt: timestamp('created_at', { withTimezone: false })
     .defaultNow()
