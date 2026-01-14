@@ -4,11 +4,21 @@ import { DonationController } from './presentation/donation.controller';
 import { DonationRepository } from './infrastructure/donation.repository';
 import { DonationService } from './infrastructure/donation.service';
 import { CreateDonationUsecase } from './application/createDonationUsecase';
+import { FindDonationByIdUseCase } from './application/find-donation-by-id.usecase';
+import { UpdateDonationUseCase } from './application/update-donation.usecase';
+import { DeleteDonationUseCase } from './application/delete-donation.usecase';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [DonationController],
-  providers: [DonationRepository, DonationService, CreateDonationUsecase],
+  providers: [
+    DonationRepository,
+    DonationService,
+    CreateDonationUsecase,
+    FindDonationByIdUseCase,
+    UpdateDonationUseCase,
+    DeleteDonationUseCase,
+  ],
   exports: [DonationService, DonationRepository],
 })
 export class DonationModule {}

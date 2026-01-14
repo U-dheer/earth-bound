@@ -1,20 +1,46 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserUsecase } from '../application/create-user.uscase';
-import { CreateUserDto } from '../dto/user.dto';
+import { FindUserByIdUseCase } from '../application/find-user-by-id.usecase';
+import { UpdateUserUseCase } from '../application/update-user.usecase';
+import { DeleteUserUseCase } from '../application/delete-user.usecase';
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 
 @ApiTags('Users')
 @Controller('user')
 export class UserController {
-  constructor(private readonly createUserUsecase: CreateUserUsecase) {}
+  constructor(
+    private readonly createUserUsecase: CreateUserUsecase,
+    private readonly findUserByIdUseCase: FindUserByIdUseCase,
+    private readonly updateUserUseCase: UpdateUserUseCase,
+    private readonly deleteUserUseCase: DeleteUserUseCase,
+  ) {}
 
-  //   @ApiOperation({
-  //     operationId: ADJUSTMENT_API_OPERATIONS.CREATE.operationId,
-  //     description: ADJUSTMENT_API_OPERATIONS.CREATE.description,
-  //   })
   @Post('create')
-  @ApiBody({ type: CreateUserDto })
   async createUser(@Body() dto: CreateUserDto) {
     return await this.createUserUsecase.execute(dto);
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    return await this.findUserByIdUseCase.execute(id);
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    return await this.updateUserUseCase.execute(id, dto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return await this.deleteUserUseCase.execute(id);
   }
 }

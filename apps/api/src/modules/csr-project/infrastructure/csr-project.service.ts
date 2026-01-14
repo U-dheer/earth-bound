@@ -7,6 +7,18 @@ export class CsrProjectService {
   constructor(private readonly csrProjectRepository: CsrProjectRepository) {}
 
   async createCsrProject(projectData: CreateCsrDto) {
-    await this.csrProjectRepository.create(projectData);
+    return this.csrProjectRepository.create(projectData);
+  }
+
+  async findById(id: string) {
+    return this.csrProjectRepository.findById(id);
+  }
+
+  async update(id: string, data: Partial<CreateCsrDto>) {
+    return this.csrProjectRepository.update(id, data);
+  }
+
+  async delete(id: string) {
+    return this.csrProjectRepository.delete(id);
   }
 }

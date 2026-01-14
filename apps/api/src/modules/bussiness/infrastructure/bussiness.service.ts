@@ -9,4 +9,16 @@ export class BussinessService {
   async createBussiness(bussinessData: CreateBussinessDto) {
     return this.bussinessRepository.createBussiness(bussinessData);
   }
+
+  async findById(id: string) {
+    return this.bussinessRepository.findById(id);
+  }
+
+  async update(id: string, data: Partial<CreateBussinessDto>) {
+    return this.bussinessRepository.update(id, data);
+  }
+
+  async delete(id: string) {
+    return this.bussinessRepository.delete(id);
+  }
 }

@@ -9,4 +9,16 @@ export class OrganizerService {
   async CreateOrganizer(organizerData: CreateOrganizerDto) {
     return this.organizerRepository.createOrganizer(organizerData);
   }
+
+  async findById(id: string) {
+    return this.organizerRepository.findById(id);
+  }
+
+  async update(id: string, data: Partial<CreateOrganizerDto>) {
+    return this.organizerRepository.update(id, data);
+  }
+
+  async delete(id: string) {
+    return this.organizerRepository.delete(id);
+  }
 }
