@@ -22,9 +22,12 @@ export class DonationController {
     private readonly deleteDonationUseCase: DeleteDonationUseCase,
   ) {}
 
-  @Post('create')
-  async createDonation(@Body() dto: CreateDonationDto) {
-    return await this.createDonationUsecase.execute(dto);
+  @Post('create/:id')
+  async createDonation(
+    @Body() dto: CreateDonationDto,
+    @Param('id') id: string,
+  ) {
+    return await this.createDonationUsecase.execute(dto, id);
   }
 
   @Get(':id')

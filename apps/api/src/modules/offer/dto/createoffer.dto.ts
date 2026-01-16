@@ -4,4 +4,5 @@ export class CreateOfferDto {
   offerCode: string;
   offerTitle: string;
   discountPercentage: number;
+  bussinessId: string;
 }

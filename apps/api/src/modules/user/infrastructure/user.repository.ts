@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { type DrizzleClient } from '../../../shared/database/drizzle.module';
 import { and, eq } from 'drizzle-orm';
-import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
+import { CreateUserDto } from '../dto/user.dto';
 import { users } from './schema/user.schema';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class UserRepository {
     return result;
   }
 
-  async update(id: string, data: UpdateUserDto) {
+  async update(id: string, data: Partial<CreateUserDto>) {
     const [result] = await this.db
       .update(users)
       .set({ ...data, updatedAt: new Date() })

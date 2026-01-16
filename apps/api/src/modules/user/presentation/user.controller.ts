@@ -12,7 +12,7 @@ import { CreateUserUsecase } from '../application/create-user.uscase';
 import { FindUserByIdUseCase } from '../application/find-user-by-id.usecase';
 import { UpdateUserUseCase } from '../application/update-user.usecase';
 import { DeleteUserUseCase } from '../application/delete-user.usecase';
-import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
+import { CreateUserDto } from '../dto/user.dto';
 
 @ApiTags('Users')
 @Controller('user')
@@ -35,7 +35,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() dto: Partial<CreateUserDto>) {
     return await this.updateUserUseCase.execute(id, dto);
   }
 
