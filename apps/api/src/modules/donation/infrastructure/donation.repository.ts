@@ -9,12 +9,21 @@ export class DonationRepository {
   constructor(@Inject('DRIZZLE_CLIENT') private readonly db: DrizzleClient) {}
 
   async create(data: CreateDonationDto, id: string) {
-    const [result] = await this.db
-      .insert(donations)
-      .values({ ...data, csrId: id })
-      .returning()
-      .execute();
-    return result;
+    try {
+      const [result] = await this.db
+        .insert(donations)
+        .values({
+          amount: data.amount,
+          csrId: data.csrId ?? id,
+          userId: data.userId,
+        })
+        .returning()
+        .execute();
+      return result;
+    } catch (error) {
+      console.error('Error creating donation:', error);
+      throw error;
+    }
   }
 
   async findById(id: string) {

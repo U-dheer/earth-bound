@@ -11,6 +11,9 @@ export const configuration = (): Configuration => ({
 
 export const configSchema = z.object({
   DATABASE_URL: z.string(),
+  STRIPE_SECRET_KEY: z.string().min(1),
+  STRIPE_WEBHOOK_SECRET: z.string().min(1),
+  FRONTEND_URL: z.string().min(1),
 });
 
 export type EnvConfig = z.infer<typeof configSchema>;

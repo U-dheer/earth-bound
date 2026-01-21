@@ -14,6 +14,7 @@ import { CsrProjectModule } from './modules/csr-project/csr-project.module';
 import { OfferModule } from './modules/offer/offer.module';
 import { DonationModule } from './modules/donation/donation.module';
 import { UserOfferModule } from './modules/user_offers/user_offer.module';
+import { StripeModule } from './modules/stripe/stripe.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserOfferModule } from './modules/user_offers/user_offer.module';
     CsrProjectModule,
     OfferModule,
     DonationModule,
+    StripeModule,
     UserOfferModule,
   ],
   controllers: [AppController],

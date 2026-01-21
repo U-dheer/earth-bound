@@ -1,3 +1,5 @@
+import { Type } from 'class-transformer';
+
 export class CreateOfferDto {
   offer_id: string;
   description: string;
@@ -5,4 +7,7 @@ export class CreateOfferDto {
   offerTitle: string;
   discountPercentage: number;
   bussinessId: string;
+
+  @Type(() => Date)
+  validUpTo: Date;
 }

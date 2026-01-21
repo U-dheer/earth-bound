@@ -1,4 +1,4 @@
-import { pgTable, uuid, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, integer, text, timestamp } from 'drizzle-orm/pg-core';
 import { businesses } from 'src/modules/bussiness/infrastructure/schema/business.schema';
 export const offers = pgTable('offers', {
   offer_id: uuid('offer_id').primaryKey().defaultRandom(),
@@ -9,7 +9,9 @@ export const offers = pgTable('offers', {
 
   offerTitle: text('offer_title').notNull(),
 
-  discountPercentage: serial('discount_percentage').notNull(),
+  discountPercentage: integer('discount_percentage').notNull(),
+
+  validUpTo: timestamp('valid_up_to', { withTimezone: true }).notNull(),
 
   bussinessId: uuid('bussiness_id')
     .notNull()

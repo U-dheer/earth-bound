@@ -9,8 +9,13 @@ export class OfferRepository {
   constructor(@Inject('DRIZZLE_CLIENT') private readonly db: DrizzleClient) {}
 
   async createOffer(data: CreateOfferDto) {
-    const [result] = await this.db.insert(offers).values(data).returning();
-    return result;
+    try {
+      const [result] = await this.db.insert(offers).values(data).returning();
+      return result;
+    } catch (error) {
+      console.error('Database error:', error);
+      throw error;
+    }
   }
 
   async findById(id: string) {
