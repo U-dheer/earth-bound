@@ -2,11 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { type DrizzleClient } from '../../../shared/database/drizzle.module';
 import { offers } from './schema/offer.schema';
 import { CreateOfferDto } from '../dto/createoffer.dto';
-import { eq } from 'drizzle-orm';
+import { eq, lte } from 'drizzle-orm';
+import { UserService } from 'src/modules/user/infrastructure/user.service';
 
 @Injectable()
 export class OfferRepository {
-  constructor(@Inject('DRIZZLE_CLIENT') private readonly db: DrizzleClient) {}
+  constructor(
+    @Inject('DRIZZLE_CLIENT') private readonly db: DrizzleClient,
+    private readonly userService: UserService,
+  ) {}
 
   async createOffer(data: CreateOfferDto) {
     try {
@@ -46,5 +50,18 @@ export class OfferRepository {
       .returning();
 
     return result;
+  }
+
+  async getAvailableOffers(userId: string) {
+    const user = await this.userService.findUserById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const [avilableOffers] = await this.db
+      .select()
+      .from(offers)
+      .where(lte(offers.redeemamountForGetTheOffer, user.redeemPoints))
+      .execute();
+    return [avilableOffers];
   }
 }

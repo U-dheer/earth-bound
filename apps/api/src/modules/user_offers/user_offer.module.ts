@@ -6,9 +6,12 @@ import { UserOfferService } from './infrastructure/user_offer.service';
 import { CreateUserOfferUseCase } from './application/create-user-offer.usecase';
 import { FindUserOfferUseCase } from './application/find-user-offer.usecase';
 import { DeleteUserOfferUseCase } from './application/delete-user-offer.usecase';
+import { OfferModule } from '../offer/offer.module';
+import { UserModule } from '../user/user.module';
+import { RedeemOfferUseCase } from './application/redeem_offer.usecase';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, OfferModule, UserModule],
   controllers: [UserOfferController],
   providers: [
     UserOfferRepository,
@@ -16,6 +19,7 @@ import { DeleteUserOfferUseCase } from './application/delete-user-offer.usecase'
     CreateUserOfferUseCase,
     FindUserOfferUseCase,
     DeleteUserOfferUseCase,
+    RedeemOfferUseCase,
   ],
   exports: [UserOfferService, UserOfferRepository],
 })

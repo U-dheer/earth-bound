@@ -17,4 +17,8 @@ export class UserOfferService {
   async deleteUserOffer(userId: string, offerId: string) {
     return this.userOfferRepository.delete(userId, offerId);
   }
+
+  async redeemOffer(userId: string, totalBill: number, offerCode: string) {
+    return this.userOfferRepository.redeemOffer(userId, totalBill, offerCode);
+  }
 }

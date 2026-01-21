@@ -13,6 +13,10 @@ export const offers = pgTable('offers', {
 
   validUpTo: timestamp('valid_up_to', { withTimezone: true }).notNull(),
 
+  redeemamountForGetTheOffer: integer(
+    'redeem_amount_for_get_the_offer',
+  ).notNull(),
+
   bussinessId: uuid('bussiness_id')
     .notNull()
     .references(() => businesses.bussiness_id, { onDelete: 'cascade' }),

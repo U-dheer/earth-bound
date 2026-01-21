@@ -6,11 +6,14 @@ import {
   Patch,
   Delete,
   Param,
+  Query,
+  ParseFloatPipe,
 } from '@nestjs/common';
 import { CreateOffersUseCase } from '../application/create-offer.usecase';
 import { FindOfferByIdUseCase } from '../application/find-offer-by-id.usecase';
 import { UpdateOfferUseCase } from '../application/update-offer.usecase';
 import { DeleteOfferUseCase } from '../application/delete-offer.usecase';
+import { GetAvailableOffersUseCase } from '../application/get-available-offers.usecase';
 import { CreateOfferDto } from '../dto/createoffer.dto';
 
 @Controller('offers')
@@ -20,6 +23,7 @@ export class OfferController {
     private readonly findOfferByIdUseCase: FindOfferByIdUseCase,
     private readonly updateOfferUseCase: UpdateOfferUseCase,
     private readonly deleteOfferUseCase: DeleteOfferUseCase,
+    private readonly getAvailableOffersUseCase: GetAvailableOffersUseCase,
   ) {}
 
   @Post('create')
@@ -40,5 +44,10 @@ export class OfferController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return await this.deleteOfferUseCase.execute(id);
+  }
+
+  @Get('available/:userId')
+  async getAvailableOffers(@Param('userId') userId: string) {
+    return await this.getAvailableOffersUseCase.execute(userId);
   }
 }

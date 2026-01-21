@@ -4,14 +4,15 @@ import { CreateUserOfferUseCase } from '../application/create-user-offer.usecase
 import { FindUserOfferUseCase } from '../application/find-user-offer.usecase';
 import { DeleteUserOfferUseCase } from '../application/delete-user-offer.usecase';
 import { CreateUserOfferDto } from '../dto/create-user-offer.dto';
+import { RedeemOfferUseCase } from '../application/redeem_offer.usecase';
 
-@ApiTags('User Offers')
 @Controller('user-offers')
 export class UserOfferController {
   constructor(
     private readonly createUserOfferUseCase: CreateUserOfferUseCase,
     private readonly findUserOfferUseCase: FindUserOfferUseCase,
     private readonly deleteUserOfferUseCase: DeleteUserOfferUseCase,
+    private readonly redeemOfferUseCase: RedeemOfferUseCase,
   ) {}
 
   @Post('create')
@@ -33,5 +34,14 @@ export class UserOfferController {
     @Param('offerId') offerId: string,
   ) {
     return await this.deleteUserOfferUseCase.execute(userId, offerId);
+  }
+
+  @Post('redeem/:userId')
+  async redeem(
+    @Param('userId') userId: string,
+    @Body('totalBill') totalBill: number,
+    @Body('offerCode') offerCode: string,
+  ) {
+    return await this.redeemOfferUseCase.execute(userId, totalBill, offerCode);
   }
 }

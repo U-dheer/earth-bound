@@ -21,4 +21,8 @@ export class OfferService {
   async delete(id: string) {
     return this.offerRepository.delete(id);
   }
+
+  async getAvailableOffers(userId: string) {
+    return this.offerRepository.getAvailableOffers(userId);
+  }
 }

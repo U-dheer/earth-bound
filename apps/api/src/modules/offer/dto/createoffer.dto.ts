@@ -7,6 +7,7 @@ export class CreateOfferDto {
   offerTitle: string;
   discountPercentage: number;
   bussinessId: string;
+  redeemamountForGetTheOffer: number;
 
   @Type(() => Date)
   validUpTo: Date;
