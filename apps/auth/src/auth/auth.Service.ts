@@ -237,7 +237,15 @@ export class AuthService {
   }
 
   async getOneUser(userId: string) {
-    return this.userModel.findById(userId).select('-password');
+    try {
+      const user = await this.userModel.findById(userId).select('-password');
+      if (!user) {
+        throw new BadRequestException('User not found');
+      }
+      return user;
+    } catch {
+      throw new BadRequestException('User not found');
+    }
   }
 
   async verifyBusiness(userId: string) {

@@ -37,11 +37,14 @@ export class UserOfferController {
   }
 
   @Post('redeem/:userId')
-  async redeem(
-    @Param('userId') userId: string,
-    @Body('totalBill') totalBill: number,
-    @Body('offerCode') offerCode: string,
-  ) {
+  async redeem(@Param('userId') userId: string, @Body() body: any) {
+    const totalBill = parseFloat(body.totalBill);
+    const offerCode = body.offerCode;
+
+    if (isNaN(totalBill)) {
+      throw new Error('totalBill must be a valid number');
+    }
+
     return await this.redeemOfferUseCase.execute(userId, totalBill, offerCode);
   }
 }

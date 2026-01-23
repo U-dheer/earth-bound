@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsUUID } from 'class-validator';
 
-export class CreateUserOfferDto {
+export class RedeemDataDto {
   @IsString()
   @IsNotEmpty()
   @IsUUID()

@@ -78,6 +78,11 @@ export class AuthController {
     return this.authService.getMe(userId);
   }
 
+  @Get('user/:id')
+  async getUser(@Param('id') id: string) {
+    return this.authService.getOneUser(id);
+  }
+
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(RolesEnum.ADMIN)
   @Get('getAllBusinesses')
