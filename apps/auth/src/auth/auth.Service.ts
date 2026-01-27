@@ -15,11 +15,11 @@ import * as bcrypt from 'bcrypt';
 import { loginDataDto } from './dtos/loginDataDto';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenDto } from './dtos/refreshTokenDto';
-import { nanoid } from 'zod';
 import { ResetOTP } from './schema/resetOTP.schema';
 import { MailService } from 'src/services/mail.service';
 import { randomInt } from 'crypto';
-
+import axios, { post } from 'axios';
+import { CreateUserDto } from './dtos/signUp.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -33,12 +33,12 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
-  async signUp(signUpData: signUpDataDto) {
+  async signUp(signUpData: CreateUserDto) {
     const exsitingUser = await this.userModel.findOne({
       email: signUpData.email,
     });
     if (exsitingUser) {
-      throw new Error('User already exists');
+      throw new BadRequestException('User already exists');
     }
 
     if (signUpData.password !== signUpData.passwordConfirm) {
@@ -47,17 +47,17 @@ export class AuthService {
 
     let hashedPassword = await bcrypt.hash(signUpData.password, 10);
 
-    await this.userModel.create({
+    const user = await this.userModel.create({
       email: signUpData.email,
       password: hashedPassword,
-      name: signUpData.name,
       role: signUpData.role,
-      bussinessName: signUpData.bussinessName,
-      bussinessAddress: signUpData.bussinessAddress,
-      bussinessContact: signUpData.bussinessContact,
-      bussinessDescription: signUpData.bussinessDescription,
-      accountNumber: signUpData.accountNumber,
     });
+
+    try {
+      await this.postTheSignUpData(signUpData, user);
+    } catch (error) {
+      throw new BadRequestException('Error in creating user in user service');
+    }
 
     return { message: 'User created successfully' };
   }
@@ -225,6 +225,7 @@ export class AuthService {
     if (!user) throw new BadRequestException('User not found');
     return user;
   }
+  signUpData;
 
   async getAllBusinesses() {
     return this.userModel.find({ role: 'BUSINESS' }).select('-password');
@@ -271,5 +272,14 @@ export class AuthService {
     return this.userModel
       .find({ role: 'ORGANIZER', isActive: false })
       .select('-password');
+  }
+
+  async postTheSignUpData(signUpData: CreateUserDto, user: User) {
+    signUpData.id = user._id.toString();
+    const response = await axios.post(
+      'http://localhost:3000/user/create',
+      signUpData,
+    );
+    return response.data;
   }
 }

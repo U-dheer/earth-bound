@@ -1,5 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
-
 export class CreateUserDto {
   id: string;
 
@@ -7,7 +5,9 @@ export class CreateUserDto {
 
   accountNumber: string;
 
-  redee_points?: number;
+  name: string;
+
+  email: string;
 }
 
 // export class UpdateUserDto {

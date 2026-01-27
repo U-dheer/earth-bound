@@ -21,30 +21,7 @@ export class signUpDataDto {
   @MinLength(6)
   passwordConfirm: string;
 
-  @IsString()
-  name: string;
-
   @Transform(({ value }) => value?.toUpperCase())
   @IsIn(['USER', 'ADMIN', 'ORGANIZER', 'BUSINESS'])
   role: RolesEnum;
-
-  @IsOptional()
-  @IsString()
-  bussinessName?: string;
-
-  @IsOptional()
-  @IsString()
-  bussinessAddress?: string;
-
-  @IsOptional()
-  @IsString()
-  bussinessContact?: string;
-
-  @IsOptional()
-  @IsString()
-  bussinessDescription?: string;
-
-  @IsOptional()
-  @IsString()
-  accountNumber?: string;
 }

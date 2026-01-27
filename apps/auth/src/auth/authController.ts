@@ -20,13 +20,14 @@ import { VerifyBussinessDto } from './dtos/verifyBussiness.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesEnum } from './utils/rolesEnum';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { CreateUserDto } from './dtos/signUp.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  async signUp(@Body() signUpData: signUpDataDto) {
+  async signUp(@Body() signUpData: CreateUserDto) {
     return this.authService.signUp(signUpData);
   }
 
