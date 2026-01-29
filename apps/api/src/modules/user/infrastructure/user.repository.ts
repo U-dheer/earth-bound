@@ -10,6 +10,7 @@ export class UserRepository {
 
   async create(data: CreateUserDto) {
     try {
+      console.log('Creating user with data:', data);
       const [result] = await this.db.insert(users).values(data).returning();
       return result;
     } catch (error) {

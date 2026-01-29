@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -22,7 +23,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { RolesEnum } from './utils/rolesEnum';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { CreateUserDto } from './dtos/signUp.dto';
-import { type Response } from 'express';
+import { type Request, type Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -38,14 +39,14 @@ export class AuthController {
     const responce = await this.authService.login(loginData);
     res.cookie('refreshToken', responce.refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Only send over HTTPS in production
+      secure: false, // Only send over HTTPS in production
       sameSite: 'strict', // CSRF protection
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     });
 
     res.cookie('accessToken', responce.accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Only send over HTTPS in production
+      secure: false, // Only send over HTTPS in production
       sameSite: 'strict', // CSRF protection
       maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
     });
@@ -54,8 +55,30 @@ export class AuthController {
   }
 
   @Post('refresh')
-  async refreshTokens(@Body() oldRefreshToken: RefreshTokenDto) {
-    return this.authService.refreshTokens(oldRefreshToken);
+  async refreshTokens(@Req() req: Request, @Res() res: Response) {
+    const oldRefreshToken = req.cookies?.refreshToken;
+
+    console.log('Old refresh token:', oldRefreshToken);
+    if (!oldRefreshToken) {
+      throw new Error('Refresh token not found');
+    }
+    const tokens = await this.authService.refreshTokens(oldRefreshToken);
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: false, // Only send over HTTPS in production
+      sameSite: 'strict', // CSRF protection
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    });
+
+    res.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      secure: false, // Only send over HTTPS in production
+      sameSite: 'strict', // CSRF protection
+      maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+    });
+
+    return res.json({ message: 'Token refreshed and saved to cookies' });
   }
 
   @Put('change-password')

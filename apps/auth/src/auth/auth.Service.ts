@@ -35,6 +35,7 @@ export class AuthService {
 
   async signUp(signUpData: CreateUserDto) {
     try {
+      console.log('Received signUpData:', signUpData);
       const exsitingUser = await this.userModel.findOne({
         email: signUpData.email,
       });
@@ -56,6 +57,7 @@ export class AuthService {
       await this.postTheSignUpData(signUpData, user);
     } catch (error) {
       console.error('Error in signUp:', error.message);
+      console.error(error);
       throw new BadRequestException('Error in creating user in user service');
     }
 
@@ -111,9 +113,9 @@ export class AuthService {
     );
   }
 
-  async refreshTokens(oldRefreshTokenDto: RefreshTokenDto) {
+  async refreshTokens(refreshToken: string) {
     const storedRefreashToken = await this.refreshTokenModel.findOne({
-      refreshToken: oldRefreshTokenDto.refreshToken,
+      refreshToken: refreshToken,
       expiryDate: { $gt: new Date() },
     });
 
@@ -274,7 +276,8 @@ export class AuthService {
       .select('-password');
   }
 
-  async postTheSignUpData(signUpData: CreateUserDto, user: User) {
+  async postTheSignUpData(signUpData: CreateUserDto, user: any) {
+    console.log('Account number in AuthService:', signUpData.accountNumber);
     signUpData.id = user._id.toString();
 
     if (user.role === 'USER') {

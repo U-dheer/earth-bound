@@ -47,13 +47,15 @@ export class GatewayService {
         timeout: 30000,
         maxBodyLength: Infinity,
         maxContentLength: Infinity,
+        withCredentials: true,
       });
 
-      return response;
+      return method === 'POST' ? response : response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new BadRequestException(error.response?.data);
       } else {
+        console.error('Unexpected error in GatewayService:', error);
         throw new InternalServerErrorException(error.message);
       }
     }

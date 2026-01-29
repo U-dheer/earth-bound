@@ -38,11 +38,24 @@ export class GatewayController {
     const isMultipart =
       contentType && contentType.includes('multipart/form-data');
     const payload = isMultipart ? req : body;
+
+    // Extract cookies from incoming request
+    const cookies = req.cookies || {};
+    const cookieString = Object.entries(cookies)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('; ');
+
+    // Add cookies to headers
+    const headersWithCookies = {
+      ...headers,
+      ...(cookieString && { cookie: cookieString }),
+    };
+
     const response = await this.gatewayService.forwardRequest(
       req.method,
       req.url,
       payload,
-      headers,
+      headersWithCookies,
     );
 
     // Forward all headers from the service response

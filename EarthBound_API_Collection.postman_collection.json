@@ -1,0 +1,2625 @@
+{
+  "info": {
+    "name": "EarthBound API Collection",
+    "_postman_id": "earth-bound-api-collection",
+    "description": "Complete API collection for EarthBound application with Direct API calls, Auth Service calls, and Gateway calls",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "API_BASE_URL",
+      "value": "http://localhost:3000",
+      "type": "string",
+      "description": "Direct API Service Base URL"
+    },
+    {
+      "key": "AUTH_BASE_URL",
+      "value": "http://localhost:3001",
+      "type": "string",
+      "description": "Direct Auth Service Base URL"
+    },
+    {
+      "key": "GATEWAY_BASE_URL",
+      "value": "http://localhost:3006",
+      "type": "string",
+      "description": "Gateway Service Base URL"
+    },
+    {
+      "key": "ACCESS_TOKEN",
+      "value": "",
+      "type": "string",
+      "description": "JWT Access Token"
+    },
+    {
+      "key": "REFRESH_TOKEN",
+      "value": "",
+      "type": "string",
+      "description": "JWT Refresh Token"
+    }
+  ],
+  "item": [
+    {
+      "name": "Direct Calls",
+      "description": "Direct API calls to individual microservices",
+      "item": [
+        {
+          "name": "Auth Service (Port 3001)",
+          "description": "Authentication and user management endpoints",
+          "item": [
+            {
+              "name": "Root",
+              "item": [
+                {
+                  "name": "Health Check",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": [""]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Authentication",
+              "item": [
+                {
+                  "name": "Sign Up",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"John Doe\",\n  \"role\": \"USER\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/signup",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "signup"]
+                    },
+                    "description": "Register a new user. Role can be: USER, ADMIN, ORGANIZER, BUSINESS"
+                  }
+                },
+                {
+                  "name": "Login",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/login",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "login"]
+                    },
+                    "description": "Login and receive access/refresh tokens"
+                  }
+                },
+                {
+                  "name": "Refresh Tokens",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"refreshToken\": \"{{REFRESH_TOKEN}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/refresh",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "refresh"]
+                    },
+                    "description": "Refresh access token using refresh token"
+                  }
+                },
+                {
+                  "name": "Validate Token",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"token\": \"{{ACCESS_TOKEN}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/validate",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "validate"]
+                    },
+                    "description": "Validate a JWT token"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Password Management",
+              "item": [
+                {
+                  "name": "Change Password",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"oldPassword\": \"currentPassword123\",\n  \"newPassword\": \"newPassword456\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/change-password",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "change-password"]
+                    },
+                    "description": "Change password (requires authentication)"
+                  }
+                },
+                {
+                  "name": "Forgot Password",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"user@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/forgot-password",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "forgot-password"]
+                    },
+                    "description": "Request password reset email"
+                  }
+                },
+                {
+                  "name": "Reset Password",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"otp\": \"123456\",\n  \"newPassword\": \"newPassword123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/reset-password",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "reset-password"]
+                    },
+                    "description": "Reset password using OTP"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "User Info",
+              "item": [
+                {
+                  "name": "Get Current User (Me)",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/me",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "me"]
+                    },
+                    "description": "Get current authenticated user details"
+                  }
+                },
+                {
+                  "name": "Get User by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/user/:id",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    },
+                    "description": "Get user by ID"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Admin Operations",
+              "item": [
+                {
+                  "name": "Get All Businesses",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/getAllBusinesses",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "getAllBusinesses"]
+                    },
+                    "description": "Get all businesses (Admin only)"
+                  }
+                },
+                {
+                  "name": "Get All Businesses Not Activated",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/getAllBusinesses-notActivated",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "getAllBusinesses-notActivated"]
+                    },
+                    "description": "Get all non-activated businesses (Admin only)"
+                  }
+                },
+                {
+                  "name": "Get One User (Admin)",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/getOneUser/:userId",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "getOneUser", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    },
+                    "description": "Get one user by ID (Admin only)"
+                  }
+                },
+                {
+                  "name": "Verify User",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/verify-users/:userId",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "verify-users", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    },
+                    "description": "Verify/activate a business user (Admin only)"
+                  }
+                },
+                {
+                  "name": "Get All Organizers",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/getAllOrganizers",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "getAllOrganizers"]
+                    },
+                    "description": "Get all organizers (Admin only)"
+                  }
+                },
+                {
+                  "name": "Get All Organizers Not Activated",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{AUTH_BASE_URL}}/auth/getAllOrganizers-notActivated",
+                      "host": ["{{AUTH_BASE_URL}}"],
+                      "path": ["auth", "getAllOrganizers-notActivated"]
+                    },
+                    "description": "Get all non-activated organizers (Admin only)"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "API Service (Port 3000)",
+          "description": "Main API service endpoints",
+          "item": [
+            {
+              "name": "Root",
+              "item": [
+                {
+                  "name": "Health Check",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": [""]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Admin",
+              "item": [
+                {
+                  "name": "Create Admin",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"Admin Name\",\n  \"email\": \"admin@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/admin/create",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["admin", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Admin by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/admin/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["admin", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "admin-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Admin",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated Admin Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/admin/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["admin", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "admin-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Admin",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/admin/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["admin", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "admin-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "User",
+              "item": [
+                {
+                  "name": "Create User",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"User Name\",\n  \"email\": \"user@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user/create",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get User by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update User",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated User Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete User",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Business",
+              "item": [
+                {
+                  "name": "Create Business",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"Business Name\",\n  \"email\": \"business@example.com\",\n  \"description\": \"Business description\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/bussiness/create",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["bussiness", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Business by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/bussiness/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["bussiness", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "business-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Business",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated Business Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/bussiness/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["bussiness", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "business-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Business",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/bussiness/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["bussiness", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "business-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Organizer",
+              "item": [
+                {
+                  "name": "Create Organizer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"Organizer Name\",\n  \"email\": \"organizer@example.com\",\n  \"description\": \"Organizer description\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/organizer/create",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["organizer", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Organizer by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/organizer/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["organizer", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "organizer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Organizer",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated Organizer Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/organizer/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["organizer", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "organizer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Organizer",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/organizer/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["organizer", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "organizer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Offers",
+              "item": [
+                {
+                  "name": "Create Offer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"Offer Title\",\n  \"description\": \"Offer description\",\n  \"discount\": 10,\n  \"businessId\": \"business-uuid-here\",\n  \"validFrom\": \"2026-01-01\",\n  \"validTo\": \"2026-12-31\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/offers/create",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["offers", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Offer by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/offers/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["offers", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Offer",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"Updated Offer Title\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/offers/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["offers", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Offer",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/offers/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["offers", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Available Offers for User",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/offers/available/:userId",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["offers", "available", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "User Offers",
+              "item": [
+                {
+                  "name": "Create User Offer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"offerId\": \"offer-uuid-here\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user-offers/create",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user-offers", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get User Offer",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user-offers/:userId/:offerId",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user-offers", ":userId", ":offerId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        },
+                        {
+                          "key": "offerId",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete User Offer",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user-offers/:userId/:offerId",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user-offers", ":userId", ":offerId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        },
+                        {
+                          "key": "offerId",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Redeem Offer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"totalBill\": \"100.00\",\n  \"offerCode\": \"OFFER123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/user-offers/redeem/:userId",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["user-offers", "redeem", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Donation",
+              "item": [
+                {
+                  "name": "Create Donation",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"amount\": 100,\n  \"userId\": \"user-uuid-here\",\n  \"message\": \"Donation message\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/donation/create/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["donation", "create", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-or-entity-uuid-here"
+                        }
+                      ]
+                    },
+                    "description": "Create a donation for a specific project/entity"
+                  }
+                },
+                {
+                  "name": "Get Donation by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/donation/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["donation", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "donation-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Donation",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"amount\": 150\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/donation/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["donation", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "donation-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Donation",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/donation/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["donation", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "donation-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "CSR Project",
+              "item": [
+                {
+                  "name": "Create CSR Project",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"CSR Project Title\",\n  \"description\": \"Project description\",\n  \"targetAmount\": 10000,\n  \"organizerId\": \"organizer-uuid-here\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/csr-project/create",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["csr-project", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get CSR Project by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/csr-project/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["csr-project", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update CSR Project",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"Updated Project Title\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/csr-project/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["csr-project", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete CSR Project",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/csr-project/:id",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["csr-project", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Stripe",
+              "item": [
+                {
+                  "name": "Create Checkout Session",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"amount\": 5000,\n  \"projectId\": \"project-uuid-here\",\n  \"userId\": \"user-uuid-here\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/stripe/checkout",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["stripe", "checkout"]
+                    },
+                    "description": "Create a Stripe checkout session for payment"
+                  }
+                },
+                {
+                  "name": "Stripe Webhook",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "stripe-signature",
+                        "value": "webhook-signature-here"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{API_BASE_URL}}/stripe/webhook",
+                      "host": ["{{API_BASE_URL}}"],
+                      "path": ["stripe", "webhook"]
+                    },
+                    "description": "Stripe webhook endpoint (called by Stripe)"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gateway Calls (Port 3006)",
+      "description": "All requests through the API Gateway - proxied to backend services",
+      "item": [
+        {
+          "name": "Auth Service (via Gateway)",
+          "item": [
+            {
+              "name": "Root",
+              "item": [
+                {
+                  "name": "Health Check",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": [""]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Authentication",
+              "item": [
+                {
+                  "name": "Sign Up",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"John Doe\",\n  \"role\": \"USER\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/signup",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "signup"]
+                    }
+                  }
+                },
+                {
+                  "name": "Login",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/login",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "login"]
+                    }
+                  }
+                },
+                {
+                  "name": "Refresh Tokens",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"refreshToken\": \"{{REFRESH_TOKEN}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/refresh",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "refresh"]
+                    }
+                  }
+                },
+                {
+                  "name": "Validate Token",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"token\": \"{{ACCESS_TOKEN}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/validate",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "validate"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Password Management",
+              "item": [
+                {
+                  "name": "Change Password",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"oldPassword\": \"currentPassword123\",\n  \"newPassword\": \"newPassword456\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/change-password",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "change-password"]
+                    }
+                  }
+                },
+                {
+                  "name": "Forgot Password",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"user@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/forgot-password",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "forgot-password"]
+                    }
+                  }
+                },
+                {
+                  "name": "Reset Password",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"otp\": \"123456\",\n  \"newPassword\": \"newPassword123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/reset-password",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "reset-password"]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "User Info",
+              "item": [
+                {
+                  "name": "Get Current User (Me)",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/me",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "me"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get User by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/user/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Admin Operations",
+              "item": [
+                {
+                  "name": "Get All Businesses",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/getAllBusinesses",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "getAllBusinesses"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get All Businesses Not Activated",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/getAllBusinesses-notActivated",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "getAllBusinesses-notActivated"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get One User (Admin)",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/getOneUser/:userId",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "getOneUser", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Verify User",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/verify-users/:userId",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "verify-users", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get All Organizers",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/getAllOrganizers",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "getAllOrganizers"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get All Organizers Not Activated",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{ACCESS_TOKEN}}"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/auth/getAllOrganizers-notActivated",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["auth", "getAllOrganizers-notActivated"]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "API Service (via Gateway)",
+          "item": [
+            {
+              "name": "Admin",
+              "item": [
+                {
+                  "name": "Create Admin",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"Admin Name\",\n  \"email\": \"admin@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/admin/create",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["admin", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Admin by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/admin/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["admin", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "admin-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Admin",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated Admin Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/admin/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["admin", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "admin-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Admin",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/admin/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["admin", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "admin-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "User",
+              "item": [
+                {
+                  "name": "Create User",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"User Name\",\n  \"email\": \"user@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user/create",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get User by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update User",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated User Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete User",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Business",
+              "item": [
+                {
+                  "name": "Create Business",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"Business Name\",\n  \"email\": \"business@example.com\",\n  \"description\": \"Business description\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/bussiness/create",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["bussiness", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Business by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/bussiness/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["bussiness", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "business-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Business",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated Business Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/bussiness/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["bussiness", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "business-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Business",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/bussiness/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["bussiness", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "business-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Organizer",
+              "item": [
+                {
+                  "name": "Create Organizer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"name\": \"Organizer Name\",\n  \"email\": \"organizer@example.com\",\n  \"description\": \"Organizer description\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/organizer/create",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["organizer", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Organizer by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/organizer/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["organizer", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "organizer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Organizer",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Updated Organizer Name\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/organizer/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["organizer", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "organizer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Organizer",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/organizer/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["organizer", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "organizer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Offers",
+              "item": [
+                {
+                  "name": "Create Offer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"Offer Title\",\n  \"description\": \"Offer description\",\n  \"discount\": 10,\n  \"businessId\": \"business-uuid-here\",\n  \"validFrom\": \"2026-01-01\",\n  \"validTo\": \"2026-12-31\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/offers/create",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["offers", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Offer by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/offers/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["offers", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Offer",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"Updated Offer Title\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/offers/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["offers", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Offer",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/offers/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["offers", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Available Offers for User",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/offers/available/:userId",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["offers", "available", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "User Offers",
+              "item": [
+                {
+                  "name": "Create User Offer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"userId\": \"user-uuid-here\",\n  \"offerId\": \"offer-uuid-here\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user-offers/create",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user-offers", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get User Offer",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user-offers/:userId/:offerId",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user-offers", ":userId", ":offerId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        },
+                        {
+                          "key": "offerId",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete User Offer",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user-offers/:userId/:offerId",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user-offers", ":userId", ":offerId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        },
+                        {
+                          "key": "offerId",
+                          "value": "offer-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Redeem Offer",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"totalBill\": \"100.00\",\n  \"offerCode\": \"OFFER123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/user-offers/redeem/:userId",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["user-offers", "redeem", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": "user-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Donation",
+              "item": [
+                {
+                  "name": "Create Donation",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"amount\": 100,\n  \"userId\": \"user-uuid-here\",\n  \"message\": \"Donation message\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/donation/create/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["donation", "create", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-or-entity-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Donation by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/donation/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["donation", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "donation-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Donation",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"amount\": 150\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/donation/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["donation", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "donation-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete Donation",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/donation/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["donation", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "donation-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "CSR Project",
+              "item": [
+                {
+                  "name": "Create CSR Project",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"CSR Project Title\",\n  \"description\": \"Project description\",\n  \"targetAmount\": 10000,\n  \"organizerId\": \"organizer-uuid-here\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/csr-project/create",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["csr-project", "create"]
+                    }
+                  }
+                },
+                {
+                  "name": "Get CSR Project by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/csr-project/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["csr-project", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update CSR Project",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"title\": \"Updated Project Title\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/csr-project/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["csr-project", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Delete CSR Project",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/csr-project/:id",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["csr-project", ":id"],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "project-uuid-here"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Stripe",
+              "item": [
+                {
+                  "name": "Create Checkout Session",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"amount\": 5000,\n  \"projectId\": \"project-uuid-here\",\n  \"userId\": \"user-uuid-here\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/stripe/checkout",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["stripe", "checkout"]
+                    }
+                  }
+                },
+                {
+                  "name": "Stripe Webhook",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "stripe-signature",
+                        "value": "webhook-signature-here"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{GATEWAY_BASE_URL}}/stripe/webhook",
+                      "host": ["{{GATEWAY_BASE_URL}}"],
+                      "path": ["stripe", "webhook"]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -22,4 +22,7 @@ export class CreateCsrDto {
   @IsOptional()
   @IsArray()
   location: [number, number] | null;
+
+  @IsString()
+  organizer_id: string;
 }
