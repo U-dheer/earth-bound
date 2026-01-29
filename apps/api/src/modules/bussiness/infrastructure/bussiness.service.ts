@@ -21,4 +21,8 @@ export class BussinessService {
   async delete(id: string) {
     return this.bussinessRepository.delete(id);
   }
+
+  async toggleActivate(id: string) {
+    return this.bussinessRepository.toggleActivate(id);
+  }
 }

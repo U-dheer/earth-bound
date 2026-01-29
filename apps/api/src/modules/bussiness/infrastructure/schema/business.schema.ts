@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 export const businesses = pgTable('businesses', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -14,6 +14,8 @@ export const businesses = pgTable('businesses', {
   phone_number: text('phone_number').notNull(),
 
   email: text('email').notNull(),
+
+  isActive: boolean('is_active').default(false).notNull(),
 
   created_at: timestamp('created_at', { withTimezone: false })
     .defaultNow()

@@ -12,6 +12,7 @@ import { FindBussinessByIdUseCase } from '../application/find-bussiness-by-id.us
 import { UpdateBussinessUseCase } from '../application/update-bussiness.usecase';
 import { DeleteBussinessUseCase } from '../application/delete-bussiness.usecase';
 import { CreateBussinessDto } from '../dto/created.bussiness.dto';
+import { ToggleActivateBussinessUseCase } from '../application/toggle-activate-bussiness-usecase';
 
 @Controller('bussiness')
 export class BussinessController {
@@ -20,6 +21,7 @@ export class BussinessController {
     private readonly findBussinessByIdUseCase: FindBussinessByIdUseCase,
     private readonly updateBussinessUseCase: UpdateBussinessUseCase,
     private readonly deleteBussinessUseCase: DeleteBussinessUseCase,
+    private readonly toggleActivateBussinessUseCase: ToggleActivateBussinessUseCase,
   ) {}
 
   @Post('create')
@@ -43,5 +45,10 @@ export class BussinessController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return await this.deleteBussinessUseCase.execute(id);
+  }
+
+  @Patch(':id/toggle-activate')
+  async activate(@Param('id') id: string) {
+    return await this.toggleActivateBussinessUseCase.execute(id);
   }
 }
