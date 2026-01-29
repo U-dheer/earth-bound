@@ -276,10 +276,27 @@ export class AuthService {
 
   async postTheSignUpData(signUpData: CreateUserDto, user: User) {
     signUpData.id = user._id.toString();
-    const response = await axios.post(
-      'http://localhost:3000/user/create',
-      signUpData,
-    );
-    return response.data;
+
+    if (user.role === 'USER') {
+      const response = await axios.post(
+        'http://localhost:3000/user/create',
+        signUpData,
+      );
+      return response.data;
+    } else if (user.role === 'BUSINESS') {
+      const response = await axios.post(
+        'http://localhost:3000/business/create',
+        signUpData,
+      );
+      return response.data;
+    } else if (user.role === 'ORGANIZER') {
+      const response = await axios.post(
+        'http://localhost:3000/organizer/create',
+        signUpData,
+      );
+      return response.data;
+    } else {
+      return { message: 'No additional data to post' };
+    }
   }
 }

@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Put,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { signUpDataDto } from './dtos/signUpDataDto';
@@ -21,6 +22,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { RolesEnum } from './utils/rolesEnum';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { CreateUserDto } from './dtos/signUp.dto';
+import { type Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -32,8 +34,23 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() loginData: loginDataDto) {
-    return this.authService.login(loginData);
+  async login(@Body() loginData: loginDataDto, @Res() res: Response) {
+    const responce = await this.authService.login(loginData);
+    res.cookie('refreshToken', responce.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only send over HTTPS in production
+      sameSite: 'strict', // CSRF protection
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    });
+
+    res.cookie('accessToken', responce.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only send over HTTPS in production
+      sameSite: 'strict', // CSRF protection
+      maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+    });
+
+    return res.json({ userId: responce.userId, message: 'Login successful' });
   }
 
   @Post('refresh')

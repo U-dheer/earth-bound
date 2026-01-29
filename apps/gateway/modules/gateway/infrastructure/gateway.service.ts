@@ -49,7 +49,7 @@ export class GatewayService {
         maxContentLength: Infinity,
       });
 
-      return response.data;
+      return response;
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new BadRequestException(error.response?.data);
