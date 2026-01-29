@@ -17,7 +17,7 @@ export class AdminRepository {
     const [result] = await this.db
       .select()
       .from(admins)
-      .where(eq(admins.admin_id, id))
+      .where(eq(admins.id, id))
       .limit(1)
       .execute();
 
@@ -28,7 +28,7 @@ export class AdminRepository {
     const [result] = await this.db
       .update(admins)
       .set(data)
-      .where(eq(admins.admin_id, id))
+      .where(eq(admins.id, id))
       .returning();
 
     return result;
@@ -37,7 +37,7 @@ export class AdminRepository {
   async delete(id: string) {
     const [result] = await this.db
       .delete(admins)
-      .where(eq(admins.admin_id, id))
+      .where(eq(admins.id, id))
       .returning();
 
     return result;

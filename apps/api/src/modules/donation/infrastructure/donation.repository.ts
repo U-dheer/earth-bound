@@ -30,7 +30,7 @@ export class DonationRepository {
     const [result] = await this.db
       .select()
       .from(donations)
-      .where(eq(donations.donation_id, id))
+      .where(eq(donations.id, id))
       .limit(1)
       .execute();
 
@@ -41,7 +41,7 @@ export class DonationRepository {
     const [result] = await this.db
       .update(donations)
       .set(data)
-      .where(eq(donations.donation_id, id))
+      .where(eq(donations.id, id))
       .returning();
 
     return result;
@@ -50,7 +50,7 @@ export class DonationRepository {
   async delete(id: string) {
     const [result] = await this.db
       .delete(donations)
-      .where(eq(donations.donation_id, id))
+      .where(eq(donations.id, id))
       .returning();
 
     return result;

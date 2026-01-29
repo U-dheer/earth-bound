@@ -1,5 +1,5 @@
 export class CreateOrganizerDto {
-  organizer_id: string;
+  id: string;
   name: string;
   description: string;
   email: string;

@@ -3,7 +3,7 @@ import { csrEvents } from 'src/modules/csr-project/infrastructure/schema/csr.eve
 import { users } from 'src/modules/user/infrastructure/schema/user.schema';
 
 export const donations = pgTable('donations', {
-  donation_id: uuid('donation_id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().defaultRandom(),
 
   amount: serial('amount').notNull(),
 

@@ -19,7 +19,7 @@ export const offers = pgTable('offers', {
 
   bussinessId: uuid('bussiness_id')
     .notNull()
-    .references(() => businesses.bussiness_id, { onDelete: 'cascade' }),
+    .references(() => businesses.id, { onDelete: 'cascade' }),
 
   createdAt: timestamp('created_at', { withTimezone: false })
     .defaultNow()

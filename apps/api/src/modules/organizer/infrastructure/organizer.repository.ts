@@ -17,7 +17,7 @@ export class OrganizerRepository {
     const [result] = await this.db
       .select()
       .from(organizers)
-      .where(eq(organizers.organizer_id, id))
+      .where(eq(organizers.id, id))
       .limit(1)
       .execute();
 
@@ -28,7 +28,7 @@ export class OrganizerRepository {
     const [result] = await this.db
       .update(organizers)
       .set(data)
-      .where(eq(organizers.organizer_id, id))
+      .where(eq(organizers.id, id))
       .returning();
 
     return result;
@@ -37,7 +37,7 @@ export class OrganizerRepository {
   async delete(id: string) {
     const [result] = await this.db
       .delete(organizers)
-      .where(eq(organizers.organizer_id, id))
+      .where(eq(organizers.id, id))
       .returning();
 
     return result;

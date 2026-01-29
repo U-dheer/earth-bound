@@ -1,7 +1,7 @@
 import { pgTable, uuid, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const admins = pgTable('admins', {
-  admin_id: uuid('admin_id').primaryKey().defaultRandom(), // uses gen_random_uuid()
+  id: uuid('id').primaryKey().defaultRandom(), // uses gen_random_uuid()
 
   email: text('email').notNull(),
 

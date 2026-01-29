@@ -1,5 +1,5 @@
 export class CreateAdminDto {
-  admin_id: string;
+  id: string;
   email: string;
   mainAccountNumber: string;
 }

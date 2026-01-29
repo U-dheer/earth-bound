@@ -25,7 +25,7 @@ export const csrEvents = pgTable('csr_events', {
 
   organizer_id: uuid('organizer_id')
     .notNull()
-    .references(() => organizers.organizer_id, { onDelete: 'cascade' }),
+    .references(() => organizers.id, { onDelete: 'cascade' }),
 
   createdAt: timestamp('created_at', { withTimezone: false })
     .defaultNow()

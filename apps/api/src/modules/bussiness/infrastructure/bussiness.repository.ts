@@ -17,7 +17,7 @@ export class BussinessRepository {
     const [result] = await this.db
       .select()
       .from(businesses)
-      .where(eq(businesses.bussiness_id, id))
+      .where(eq(businesses.id, id))
       .limit(1)
       .execute();
 
@@ -28,7 +28,7 @@ export class BussinessRepository {
     const [result] = await this.db
       .update(businesses)
       .set(data)
-      .where(eq(businesses.bussiness_id, id))
+      .where(eq(businesses.id, id))
       .returning();
 
     return result;
@@ -37,7 +37,7 @@ export class BussinessRepository {
   async delete(id: string) {
     const [result] = await this.db
       .delete(businesses)
-      .where(eq(businesses.bussiness_id, id))
+      .where(eq(businesses.id, id))
       .returning();
 
     return result;

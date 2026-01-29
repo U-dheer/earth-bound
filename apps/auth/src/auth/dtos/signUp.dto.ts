@@ -1,8 +1,6 @@
 export class CreateUserDto {
   // ID Fields
   id: string;
-  organizer_id?: string;
-  admin_id?: string;
 
   // Name & Description
   name: string;

@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const organizers = pgTable('organizers', {
-  organizer_id: uuid('organizer_id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().defaultRandom(),
 
   name: text('name').notNull(),
 
