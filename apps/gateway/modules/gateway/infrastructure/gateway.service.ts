@@ -35,6 +35,10 @@ export class GatewayService {
         forwardedHeaders['Content-Type'] = headers['content-type'];
       }
 
+      console.log('Forwarded Headers:', forwardedHeaders);
+      console.log('Body:', body);
+      console.log('Method:', method);
+
       const response = await axios.request({
         method,
         url: refinedUrl,

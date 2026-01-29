@@ -9,8 +9,13 @@ export class UserRepository {
   constructor(@Inject('DRIZZLE_CLIENT') private readonly db: DrizzleClient) {}
 
   async create(data: CreateUserDto) {
-    const [result] = await this.db.insert(users).values(data).returning();
-    return result;
+    try {
+      const [result] = await this.db.insert(users).values(data).returning();
+      return result;
+    } catch (error) {
+      console.error('Error in UserRepository.create:', error);
+      throw error;
+    }
   }
 
   async findById(id: string) {

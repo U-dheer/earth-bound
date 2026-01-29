@@ -34,28 +34,28 @@ export class AuthService {
   ) {}
 
   async signUp(signUpData: CreateUserDto) {
-    const exsitingUser = await this.userModel.findOne({
-      email: signUpData.email,
-    });
-    if (exsitingUser) {
-      throw new BadRequestException('User already exists');
-    }
-
-    if (signUpData.password !== signUpData.passwordConfirm) {
-      throw new BadRequestException('Passwords are not identical');
-    }
-
-    let hashedPassword = await bcrypt.hash(signUpData.password, 10);
-
-    const user = await this.userModel.create({
-      email: signUpData.email,
-      password: hashedPassword,
-      role: signUpData.role,
-    });
-
     try {
+      const exsitingUser = await this.userModel.findOne({
+        email: signUpData.email,
+      });
+      if (exsitingUser) {
+        throw new BadRequestException('User already exists');
+      }
+
+      if (signUpData.password !== signUpData.passwordConfirm) {
+        throw new BadRequestException('Passwords are not identical');
+      }
+
+      let hashedPassword = await bcrypt.hash(signUpData.password, 10);
+
+      const user = await this.userModel.create({
+        email: signUpData.email,
+        password: hashedPassword,
+        role: signUpData.role,
+      });
       await this.postTheSignUpData(signUpData, user);
     } catch (error) {
+      console.error('Error in signUp:', error.message);
       throw new BadRequestException('Error in creating user in user service');
     }
 
