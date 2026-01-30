@@ -24,6 +24,7 @@ import { RolesEnum } from './utils/rolesEnum';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { CreateUserDto } from './dtos/signUp.dto';
 import { type Request, type Response } from 'express';
+import { TokenConfig } from './config/token.config';
 
 @Controller('auth')
 export class AuthController {
@@ -38,17 +39,13 @@ export class AuthController {
   async login(@Body() loginData: loginDataDto, @Res() res: Response) {
     const responce = await this.authService.login(loginData);
     res.cookie('refreshToken', responce.refreshToken, {
-      httpOnly: true,
-      secure: false, // Only send over HTTPS in production
-      sameSite: 'strict', // CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+      ...TokenConfig.cookie,
+      maxAge: TokenConfig.refreshToken.cookieMaxAge,
     });
 
     res.cookie('accessToken', responce.accessToken, {
-      httpOnly: true,
-      secure: false, // Only send over HTTPS in production
-      sameSite: 'strict', // CSRF protection
-      maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+      ...TokenConfig.cookie,
+      maxAge: TokenConfig.accessToken.cookieMaxAge,
     });
 
     return res.json({ userId: responce.userId, message: 'Login successful' });
@@ -65,17 +62,13 @@ export class AuthController {
     const tokens = await this.authService.refreshTokens(oldRefreshToken);
 
     res.cookie('refreshToken', tokens.refreshToken, {
-      httpOnly: true,
-      secure: false, // Only send over HTTPS in production
-      sameSite: 'strict', // CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+      ...TokenConfig.cookie,
+      maxAge: TokenConfig.refreshToken.cookieMaxAge,
     });
 
     res.cookie('accessToken', tokens.accessToken, {
-      httpOnly: true,
-      secure: false, // Only send over HTTPS in production
-      sameSite: 'strict', // CSRF protection
-      maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+      ...TokenConfig.cookie,
+      maxAge: TokenConfig.accessToken.cookieMaxAge,
     });
 
     return res.json({ message: 'Token refreshed and saved to cookies' });

@@ -20,6 +20,8 @@ import { MailService } from 'src/services/mail.service';
 import { randomInt } from 'crypto';
 import axios, { post } from 'axios';
 import { CreateUserDto } from './dtos/signUp.dto';
+import { TokenConfig, getRefreshTokenExpiryDate } from './config/token.config';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -78,29 +80,47 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const tokens = await this.generateTokens(user._id.toString(), user.role);
+    const tokens = await this.generateTokens(
+      user._id.toString(),
+      user.role,
+      user.tokenVersion,
+    );
     return {
       ...tokens,
       userId: user._id,
     };
   }
 
-  async generateTokens(userId: string, role: string) {
+  async generateTokens(userId: string, role: string, tokenVersion: number = 0) {
     const accessToken = await this.jwtService.signAsync(
-      { userId, role },
-      { expiresIn: '15m' },
+      { userId, role, tokenVersion },
+      { expiresIn: TokenConfig.accessToken.expiresIn },
     );
     const refreshToken = await this.jwtService.signAsync(
-      { userId, role },
-      { expiresIn: '7d' },
+      { userId, role, tokenVersion },
+      { expiresIn: TokenConfig.refreshToken.expiresIn },
     );
     await this.storeRefreshToken(userId, refreshToken);
     return { accessToken, refreshToken };
   }
 
+  /**
+   * Generate only a new access token (used during refresh to keep original refresh token)
+   */
+  async generateAccessToken(
+    userId: string,
+    role: string,
+    tokenVersion: number = 0,
+  ) {
+    const accessToken = await this.jwtService.signAsync(
+      { userId, role, tokenVersion },
+      { expiresIn: TokenConfig.accessToken.expiresIn },
+    );
+    return accessToken;
+  }
+
   async storeRefreshToken(userId: string, refreshToken: string) {
-    const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() + 7); // 7 days validity
+    const expiryDate = getRefreshTokenExpiryDate();
 
     await this.refreshTokenModel.updateOne(
       { userId },
@@ -114,21 +134,54 @@ export class AuthService {
   }
 
   async refreshTokens(refreshToken: string) {
+    // First, verify the refresh token JWT is valid and not expired
+    let payload: any;
+    try {
+      console.log('Verifying refresh token JWT...');
+      payload = await this.jwtService.verifyAsync(refreshToken);
+      console.log('Refresh token JWT verified successfully, payload:', payload);
+    } catch (error) {
+      console.log('Refresh token JWT verification failed:', error.message);
+      throw new UnauthorizedException(
+        'Refresh token has expired or is invalid',
+      );
+    }
+
+    // Then check if it exists in the database
     const storedRefreashToken = await this.refreshTokenModel.findOne({
       refreshToken: refreshToken,
       expiryDate: { $gt: new Date() },
     });
 
     if (!storedRefreashToken) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid or expired refresh token');
     }
 
     const user = await this.userModel.findById(storedRefreashToken.userId);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('User not found');
     }
 
-    return this.generateTokens(storedRefreashToken.userId, user.role);
+    // Verify token version from JWT matches (hasn't been revoked before)
+    const tokenVersion = payload.tokenVersion ?? 0;
+    const userTokenVersion = user.tokenVersion ?? 0;
+    if (tokenVersion !== userTokenVersion) {
+      throw new UnauthorizedException('Refresh token has been revoked');
+    }
+
+    // Generate only a new access token - keep the same refresh token
+    // This ensures the session expires when the original refresh token expires
+    const accessToken = await this.generateAccessToken(
+      storedRefreashToken.userId,
+      user.role,
+      userTokenVersion, // Use same tokenVersion - don't increment
+    );
+
+    // Return new access token but keep the SAME refresh token
+    return {
+      accessToken,
+      refreshToken, // Return the same refresh token (not a new one)
+    };
   }
 
   async changePassword(
@@ -203,10 +256,22 @@ export class AuthService {
         .findById(payload.userId)
         .select('-password');
       if (!user) {
-        throw new UnauthorizedException('Invalid token : User not found');
+        throw new UnauthorizedException('Invalid token: User not found');
       }
+
+      // Check if token version matches (token not revoked)
+      const tokenVersion = payload.tokenVersion ?? 0;
+      const userTokenVersion = user.tokenVersion ?? 0;
+
+      if (tokenVersion !== userTokenVersion) {
+        throw new UnauthorizedException('Token has been revoked');
+      }
+
       return { valid: true, user };
-    } catch {
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new UnauthorizedException('Invalid or expired token');
     }
   }
