@@ -73,7 +73,7 @@ Content-Type: application/json
   "email": "john@example.com",
   "password": "SecurePass123!",
   "passwordConfirm": "SecurePass123!",
-  "role": "user",
+  "role": "USER",
   "phone_number": "+1234567890",
   "accountNumber": "ACC123456",
   "redeemPoints": 0,

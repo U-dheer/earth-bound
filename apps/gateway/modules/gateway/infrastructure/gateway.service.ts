@@ -38,6 +38,7 @@ export class GatewayService {
       console.log('Forwarded Headers:', forwardedHeaders);
       console.log('Body:', body);
       console.log('Method:', method);
+      console.log('URL:', refinedUrl);
 
       const response = await axios.request({
         method,
@@ -53,6 +54,11 @@ export class GatewayService {
       return method === 'POST' ? response : response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
+        console.error('Error in GatewayService Axios request:', {
+          message: error.message,
+          responseData: error.response?.data,
+          status: error.response?.status,
+        });
         throw new BadRequestException(error.response?.data);
       } else {
         console.error('Unexpected error in GatewayService:', error);

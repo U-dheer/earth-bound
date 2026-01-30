@@ -3,6 +3,7 @@ import { ServicesConfig } from '../configs/service-config';
 export const resolveServiceUrl = (path: string): string => {
   if (path.startsWith('/auth')) {
     const url = ServicesConfig.auth;
+    console.log(ServicesConfig)
     if (!url) {
       throw new Error('Auth service URL is not configured');
     }

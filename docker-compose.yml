@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+    container_name: earth-bound-gateway
+    ports:
+      - "3006:3006"
+    volumes:
+      - ./apps/gateway:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - AUTH_SERVICE_URL=http://earth-bound-auth:3001
+      - API_SERVICE_URL=http://earth-bound-api:3000
+    networks:
+      - earth-bound-network
+
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+    container_name: earth-bound-auth
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/auth:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - gateway
+    networks:
+      - earth-bound-network
+
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    container_name: earth-bound-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - gateway
+    networks:
+      - earth-bound-network
+
+networks:
+  earth-bound-network:
+    driver: bridge
