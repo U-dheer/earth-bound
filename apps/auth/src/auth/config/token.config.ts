@@ -7,17 +7,17 @@ export const TokenConfig = {
   // Access Token Settings
   accessToken: {
     /** JWT expiry time (e.g., '15m', '1h', '30s') */
-    expiresIn: '10s' as const,
+    expiresIn: '15m' as const,
     /** Cookie maxAge in milliseconds */
-    cookieMaxAge: 10 * 1000, // 10 seconds
+    cookieMaxAge: 15 * 60 * 1000, // 15 minutes
   },
 
   // Refresh Token Settings
   refreshToken: {
     /** JWT expiry time (e.g., '7d', '30d', '1h') */
-    expiresIn: '1m' as const,
+    expiresIn: '7d' as const,
     /** Cookie maxAge in milliseconds */
-    cookieMaxAge: 60 * 1000, // 1 minute
+    cookieMaxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     /** Database expiry in days */
     dbExpiryDays: 7,
   },
