@@ -283,6 +283,30 @@ export class AuthService {
     return user;
   }
 
+  /**
+   * Logout user by invalidating all tokens
+   * - Increments tokenVersion to invalidate all existing JWTs
+   * - Removes refresh token from database
+   */
+  async logout(userId: string) {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    // Increment token version to invalidate ALL existing tokens
+    const newTokenVersion = (user.tokenVersion || 0) + 1;
+    await this.userModel.updateOne(
+      { _id: userId },
+      { $set: { tokenVersion: newTokenVersion } },
+    );
+
+    // Remove refresh token from database
+    await this.refreshTokenModel.deleteOne({ userId });
+
+    return { message: 'Logged out successfully. All tokens invalidated.' };
+  }
+
   async getmeThroughToken(token: string) {
     if (!token) throw new BadRequestException('Token is required');
     const payload = await this.jwtService.verifyAsync(token);

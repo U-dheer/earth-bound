@@ -158,4 +158,17 @@ export class AuthController {
   async getAllOrganizersNotActivated() {
     return this.authService.getAllOrganizersNotActivated();
   }
+
+  @Get('logout')
+  @UseGuards(AuthGuard)
+  async logout(@RequestUser() userId: string, @Res() res: Response) {
+    // Invalidate all tokens for this user in the database
+    await this.authService.logout(userId);
+
+    // Clear cookies
+    res.clearCookie('accessToken', TokenConfig.cookie);
+    res.clearCookie('refreshToken', TokenConfig.cookie);
+
+    return res.json({ message: 'Logged out successfully' });
+  }
 }
