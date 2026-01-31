@@ -20,8 +20,8 @@ services:
 
   auth:
     build:
-      context: .
-      dockerfile: ./apps/auth/Dockerfile
+      context: .                              # ← Build context is the ROOT folder
+      dockerfile: ./apps/auth/Dockerfile      # ← But Dockerfile is in apps/auth
     container_name: earth-bound-auth
     ports:
       - "3001:3001"

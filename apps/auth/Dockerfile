@@ -2,17 +2,15 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package.json from the correct app directory (relative to build context)
+COPY apps/auth/package*.json ./
 
-# Install all dependencies (including dev dependencies)
+# Install all dependencies including devDependencies
 RUN npm install
 
-# Copy source code
-COPY . .
+# Copy only the auth app files
+COPY apps/auth/ .
 
-# Expose the port
 EXPOSE 3001
 
-# Start in development mode
 CMD ["npm", "run", "start:dev"]
