@@ -6,6 +6,7 @@ import {
   ConfigService,
   ConfigModule as NestConfigModule,
 } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './modules/user/user.module';
 import { BussinessModule } from './modules/bussiness/bussiness.module';
 import { OrganizerModule } from './modules/organizer/organizer.module';
@@ -21,6 +22,14 @@ import { StripeModule } from './modules/stripe/stripe.module';
     NestConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+    }),
+    JwtModule.registerAsync({
+      imports: [NestConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET_KEY'),
+      }),
+      global: true,
     }),
     UserModule,
     BussinessModule,

@@ -371,19 +371,19 @@ export class AuthService {
 
     if (user.role === 'USER') {
       const response = await axios.post(
-        'http://localhost:3000/user/create',
+        'http://localhost:3000/api/user/create',
         signUpData,
       );
       return response.data;
     } else if (user.role === 'BUSINESS') {
       const response = await axios.post(
-        'http://localhost:3000/business/create',
+        'http://localhost:3000/api/bussiness/create',
         signUpData,
       );
       return response.data;
     } else if (user.role === 'ORGANIZER') {
       const response = await axios.post(
-        'http://localhost:3000/organizer/create',
+        'http://localhost:3000/api/organizer/create',
         signUpData,
       );
       return response.data;

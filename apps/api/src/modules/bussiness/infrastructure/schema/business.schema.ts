@@ -15,6 +15,8 @@ export const businesses = pgTable('businesses', {
 
   email: text('email').notNull(),
 
+  accountNumber: text('account_number'),
+
   isActive: boolean('is_active').default(false).notNull(),
 
   created_at: timestamp('created_at', { withTimezone: false })

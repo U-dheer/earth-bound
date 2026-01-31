@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsDate, IsString, IsOptional, IsArray } from 'class-validator';
 
 export class CreateCsrDto {
-  @IsString()
+  // @IsString()
   id: string;
 
   @IsString()

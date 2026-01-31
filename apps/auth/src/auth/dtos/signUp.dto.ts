@@ -11,7 +11,7 @@ export class CreateUserDto {
   phone_number?: string;
 
   // Financial Fields
-  accountNumber: string;
+  accountNumber?: string;
   mainAccountNumber?: string; // ⚠️ CONFLICT: Duplicate account field (unclear distinction between accountNumber and mainAccountNumber)
 
   // User/Points Fields
