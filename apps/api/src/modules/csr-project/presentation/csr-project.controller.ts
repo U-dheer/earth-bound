@@ -6,6 +6,7 @@ import {
   Patch,
   Delete,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateCsrProjectUsecase } from '../application/create-project.usecase';
 import { FindCsrProjectByIdUseCase } from '../application/find-csr-project-by-id.usecase';
@@ -13,8 +14,10 @@ import { UpdateCsrProjectUseCase } from '../application/update-csr-project.useca
 import { DeleteCsrProjectUseCase } from '../application/delete-csr-project.usecase';
 import { CreateCsrDto } from '../dto/create_csr-project.dto';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
+import { AuthGuard } from '../../../shared/guards/auth.guard';
 
 @Controller('csr-project')
+@UseGuards(AuthGuard)
 export class CsrProjectController {
   constructor(
     private readonly createCsrProjectUsecase: CreateCsrProjectUsecase,
@@ -26,7 +29,7 @@ export class CsrProjectController {
   @Post('create')
   async createCsrProject(
     @Body() dto: CreateCsrDto,
-    @CurrentUser('id') organizerId: string,
+    @CurrentUser('userId') organizerId: any,
   ) {
     console.log('Organizer ID:', organizerId);
     return await this.createCsrProjectUsecase.execute(dto, organizerId);

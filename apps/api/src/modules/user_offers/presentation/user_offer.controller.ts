@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import { CreateUserOfferUseCase } from '../application/create-user-offer.usecase';
 import { FindUserOfferUseCase } from '../application/find-user-offer.usecase';
 import { DeleteUserOfferUseCase } from '../application/delete-user-offer.usecase';
