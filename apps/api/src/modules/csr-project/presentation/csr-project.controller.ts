@@ -28,6 +28,7 @@ export class CsrProjectController {
     @Body() dto: CreateCsrDto,
     @CurrentUser('id') organizerId: string,
   ) {
+    console.log('Organizer ID:', organizerId);
     return await this.createCsrProjectUsecase.execute(dto, organizerId);
   }
 

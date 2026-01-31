@@ -6,4 +6,5 @@ export class CreateBussinessDto {
   description: string;
   phone_number: string;
   email: string;
+  accountNumber?: string;
 }
