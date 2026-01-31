@@ -16,7 +16,6 @@ export class CreateUserDto {
 
   // User/Points Fields
   redeemPoints: number;
-  redee_points?: number; // ⚠️ CONFLICT: Typo variant of redeemPoints - both represent the same concept
 
   // Business Fields
   address?: string;

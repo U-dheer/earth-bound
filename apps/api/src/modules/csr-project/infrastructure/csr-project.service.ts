@@ -6,8 +6,8 @@ import { CreateCsrDto } from '../dto/create_csr-project.dto';
 export class CsrProjectService {
   constructor(private readonly csrProjectRepository: CsrProjectRepository) {}
 
-  async createCsrProject(projectData: CreateCsrDto) {
-    return this.csrProjectRepository.create(projectData);
+  async createCsrProject(projectData: CreateCsrDto, organizerId: string) {
+    return this.csrProjectRepository.create(projectData, organizerId);
   }
 
   async findById(id: string) {

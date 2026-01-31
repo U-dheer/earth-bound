@@ -8,8 +8,11 @@ import { eq } from 'drizzle-orm';
 export class CsrProjectRepository {
   constructor(@Inject('DRIZZLE_CLIENT') private readonly db: DrizzleClient) {}
 
-  async create(data: CreateCsrDto) {
-    const [result] = await this.db.insert(csrEvents).values(data).returning();
+  async create(data: CreateCsrDto, organizer_id: string) {
+    const [result] = await this.db
+      .insert(csrEvents)
+      .values({ ...data, organizer_id: organizer_id })
+      .returning();
     return result;
   }
 

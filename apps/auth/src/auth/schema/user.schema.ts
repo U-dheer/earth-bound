@@ -25,17 +25,17 @@ export class User {
   @Prop()
   isActive: boolean;
 
-  @Prop()
-  bussinessName: string;
+  // @Prop()
+  // bussinessName: string;
 
-  @Prop()
-  bussinessAddress: string;
+  // @Prop()
+  // bussinessAddress: string;
 
-  @Prop()
-  bussinessContact: string;
+  // @Prop()
+  // bussinessContact: string;
 
-  @Prop()
-  bussinessDescription: string;
+  // @Prop()
+  // bussinessDescription: string;
 
   @Prop({ default: 0 })
   redeemPoints: number;

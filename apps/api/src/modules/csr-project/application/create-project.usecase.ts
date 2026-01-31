@@ -6,9 +6,16 @@ import { CreateCsrDto } from '../dto/create_csr-project.dto';
 export class CreateCsrProjectUsecase {
   constructor(private readonly csrProjectService: CsrProjectService) {}
 
-  async execute(data: CreateCsrDto) {
+  async execute(data: CreateCsrDto, organizerId: string) {
     try {
-      const csrProject = await this.csrProjectService.createCsrProject(data);
+      const projectData = {
+        ...data,
+        organizer_id: organizerId,
+      };
+      const csrProject = await this.csrProjectService.createCsrProject(
+        projectData,
+        organizerId,
+      );
       return csrProject;
     } catch (error) {
       throw new BadRequestException(

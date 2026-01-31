@@ -38,7 +38,7 @@ export class AuthMiddleware implements NestMiddleware {
   private initializePublicPaths(): void {
     const publicPathsConfig =
       process.env.GATEWAY_PUBLIC_PATHS ||
-      '/auth/signup,/auth/login,/auth/refresh,/status,/health';
+      '/auth/signup,/auth/login,/auth/refresh,/status,/auth/forgot-password';
 
     const paths = publicPathsConfig.split(',').map((p) => p.trim());
 

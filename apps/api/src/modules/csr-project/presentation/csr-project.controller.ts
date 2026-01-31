@@ -12,6 +12,7 @@ import { FindCsrProjectByIdUseCase } from '../application/find-csr-project-by-id
 import { UpdateCsrProjectUseCase } from '../application/update-csr-project.usecase';
 import { DeleteCsrProjectUseCase } from '../application/delete-csr-project.usecase';
 import { CreateCsrDto } from '../dto/create_csr-project.dto';
+import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 
 @Controller('csr-project')
 export class CsrProjectController {
@@ -23,8 +24,11 @@ export class CsrProjectController {
   ) {}
 
   @Post('create')
-  async createCsrProject(@Body() dto: CreateCsrDto) {
-    return await this.createCsrProjectUsecase.execute(dto);
+  async createCsrProject(
+    @Body() dto: CreateCsrDto,
+    @CurrentUser('id') organizerId: string,
+  ) {
+    return await this.createCsrProjectUsecase.execute(dto, organizerId);
   }
 
   @Get(':id')
