@@ -387,6 +387,12 @@ export class AuthService {
         signUpData,
       );
       return response.data;
+    } else if (user.role === 'ADMIN') {
+      const response = await axios.post(
+        'http://localhost:3000/api/admin/create',
+        signUpData,
+      );
+      return response.data;
     } else {
       return { message: 'No additional data to post' };
     }

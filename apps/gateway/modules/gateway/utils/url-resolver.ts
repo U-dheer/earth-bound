@@ -137,11 +137,12 @@ const serviceRoutes: ServiceRouteConfig[] = [
       { path: '/categories', methods: ['GET'], isPublic: true },
 
       // ----- CSR Project routes -----
-      { path: '/csr-project', methods: ['GET'], isPublic: true },
       {
         path: '/csr-project',
         allowedRoles: [UserRole.ADMIN, UserRole.ORGANIZER],
+        methods: ['POST', 'PUT', 'DELETE'],
       },
+      { path: '/csr-project', methods: ['GET'], isPublic: true },
 
       // ----- Donation routes -----
       { path: '/donation', allowedRoles: undefined }, // All authenticated
@@ -304,7 +305,7 @@ export const resolveServiceUrl = (
   // Check access
   if (!isAccessAllowed(route, role, path)) {
     throw new ForbiddenException(
-      `Access denied. Insufficient permissions for path: ${path}`,
+      `Access denied. Insufficient permissions for path: ${path} : role : ${role}`,
     );
   }
 

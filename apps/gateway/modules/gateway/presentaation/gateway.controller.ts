@@ -123,10 +123,15 @@ export class GatewayController {
   }
 
   @Delete('*')
-  async forwardDelete(@Req() req, @Headers() headers: any) {
+  async forwardDelete(
+    @Req() req,
+    @Headers() headers: any,
+    @CurrentUser('role') userRole: string | undefined,
+  ) {
     return this.gatewayService.forwardRequest(
       req.method,
       req.url,
+      userRole,
       undefined,
       headers,
     );
