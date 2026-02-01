@@ -5,7 +5,7 @@ import { OfferService } from '../infrastructure/offer.service';
 export class GetAvailableOffersUseCase {
   constructor(private readonly offerService: OfferService) {}
 
-  async execute(userId: string) {
+  async execute(userId: any) {
     try {
       const offers = await this.offerService.getAvailableOffers(userId);
       return offers;

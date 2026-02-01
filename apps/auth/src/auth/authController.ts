@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Req,
@@ -85,6 +86,15 @@ export class AuthController {
       changePasswordDto.oldPassword,
       changePasswordDto.newPassword,
     );
+  }
+
+  @Patch('user/:id')
+  @UseGuards(AuthGuard)
+  async updateUser(
+    @Body() dto: Partial<CreateUserDto>,
+    @RequestUser() userId: string,
+  ) {
+    return this.authService.updateUser(userId, dto);
   }
 
   @Post('forgot-password')

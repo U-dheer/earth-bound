@@ -12,9 +12,12 @@ export class OfferRepository {
     private readonly userService: UserService,
   ) {}
 
-  async createOffer(data: CreateOfferDto) {
+  async createOffer(data: CreateOfferDto, userId: any) {
     try {
-      const [result] = await this.db.insert(offers).values(data).returning();
+      const [result] = await this.db
+        .insert(offers)
+        .values({ ...data, bussinessId: userId })
+        .returning();
       return result;
     } catch (error) {
       console.error('Database error:', error);
@@ -52,15 +55,16 @@ export class OfferRepository {
     return result;
   }
 
-  async getAvailableOffers(userId: string) {
-    const user = await this.userService.findUserById(userId);
-    if (!user) {
+  async getAvailableOffers(userId: any) {
+    console.log('userId', userId);
+    const userData = await this.userService.findUserById(userId);
+    if (!userData) {
       throw new Error('User not found');
     }
     const [avilableOffers] = await this.db
       .select()
       .from(offers)
-      .where(lte(offers.redeemamountForGetTheOffer, user.redeemPoints))
+      .where(lte(offers.redeemamountForGetTheOffer, userData.redeemPoints))
       .execute();
     return [avilableOffers];
   }

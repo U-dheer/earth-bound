@@ -6,8 +6,8 @@ import { CreateOfferDto } from '../dto/createoffer.dto';
 export class OfferService {
   constructor(private readonly offerRepository: OfferRepository) {}
 
-  async createOffer(offerData: CreateOfferDto) {
-    return this.offerRepository.createOffer(offerData);
+  async createOffer(offerData: CreateOfferDto, userId: any) {
+    return this.offerRepository.createOffer(offerData, userId);
   }
 
   async findById(id: string) {
@@ -22,7 +22,7 @@ export class OfferService {
     return this.offerRepository.delete(id);
   }
 
-  async getAvailableOffers(userId: string) {
+  async getAvailableOffers(userId: any) {
     return this.offerRepository.getAvailableOffers(userId);
   }
 }

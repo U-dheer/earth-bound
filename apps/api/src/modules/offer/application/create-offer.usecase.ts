@@ -6,9 +6,9 @@ import { CreateOfferDto } from '../dto/createoffer.dto';
 export class CreateOffersUseCase {
   constructor(private readonly offerService: OfferService) {}
 
-  async execute(data: CreateOfferDto) {
+  async execute(data: CreateOfferDto, userId: any) {
     try {
-      const offer = await this.offerService.createOffer(data);
+      const offer = await this.offerService.createOffer(data, userId);
       return offer;
     } catch (error) {
       throw new BadRequestException(

@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   ParseFloatPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateOffersUseCase } from '../application/create-offer.usecase';
 import { FindOfferByIdUseCase } from '../application/find-offer-by-id.usecase';
@@ -15,8 +16,11 @@ import { UpdateOfferUseCase } from '../application/update-offer.usecase';
 import { DeleteOfferUseCase } from '../application/delete-offer.usecase';
 import { GetAvailableOffersUseCase } from '../application/get-available-offers.usecase';
 import { CreateOfferDto } from '../dto/createoffer.dto';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 @Controller('offers')
+@UseGuards(AuthGuard)
 export class OfferController {
   constructor(
     private readonly createOfferUsecase: CreateOffersUseCase,
@@ -27,8 +31,16 @@ export class OfferController {
   ) {}
 
   @Post('create')
-  async createOffer(@Body() dto: CreateOfferDto) {
-    return await this.createOfferUsecase.execute(dto);
+  async createOffer(
+    @Body() dto: CreateOfferDto,
+    @CurrentUser('userId') userId: any,
+  ) {
+    return await this.createOfferUsecase.execute(dto, userId);
+  }
+
+  @Get('available')
+  async getAvailableOffers(@CurrentUser('userId') userId: any) {
+    return await this.getAvailableOffersUseCase.execute(userId);
   }
 
   @Get(':id')
@@ -44,10 +56,5 @@ export class OfferController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return await this.deleteOfferUseCase.execute(id);
-  }
-
-  @Get('available/:userId')
-  async getAvailableOffers(@Param('userId') userId: string) {
-    return await this.getAvailableOffersUseCase.execute(userId);
   }
 }

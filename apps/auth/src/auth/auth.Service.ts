@@ -391,4 +391,22 @@ export class AuthService {
       return { message: 'No additional data to post' };
     }
   }
+
+  async updateUser(userId: string, dto: Partial<CreateUserDto>) {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    // Update only allowed fields
+    const allowedFields = ['email', 'name', 'role', 'redeemPoints'];
+    for (const field of allowedFields) {
+      if (dto[field] !== undefined) {
+        user[field] = dto[field];
+      }
+    }
+
+    await user.save();
+    return { message: 'User updated successfully' };
+  }
 }

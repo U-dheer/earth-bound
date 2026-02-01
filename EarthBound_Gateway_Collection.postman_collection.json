@@ -1,0 +1,1342 @@
+{
+  "info": {
+    "_postman_id": "eb8f9c5a-4d3e-4f21-9e1b-8c6d7a2b1f30",
+    "name": "EarthBound Gateway API",
+    "description": "Complete API collection for EarthBound Gateway Service. All requests are routed through the gateway at port 3006.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3006",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints - signup, login, logout, password management",
+      "item": [
+        {
+          "name": "Public",
+          "description": "Public authentication endpoints that don't require authentication",
+          "item": [
+            {
+              "name": "Sign Up",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"passwordConfirm\": \"password123\",\n    \"role\": \"USER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/signup",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "signup"]
+                },
+                "description": "Register a new user. Available roles: USER, ADMIN, ORGANIZER, BUSINESS"
+              }
+            },
+            {
+              "name": "Login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Cookies are automatically set by the server",
+                      "pm.test(\"Login successful\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "login"]
+                },
+                "description": "Login with email and password. Sets accessToken and refreshToken cookies."
+              }
+            },
+            {
+              "name": "Refresh Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/refresh",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "refresh"]
+                },
+                "description": "Refresh access token using the refresh token cookie"
+              }
+            },
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"user@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/forgot-password",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "forgot-password"]
+                },
+                "description": "Request password reset OTP via email"
+              }
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"otp\": \"123456\",\n    \"newPassword\": \"newpassword123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/reset-password",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "reset-password"]
+                },
+                "description": "Reset password using OTP received via email"
+              }
+            },
+            {
+              "name": "Validate Token",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"token\": \"your-jwt-token-here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/validate",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "validate"]
+                },
+                "description": "Validate a JWT token"
+              }
+            },
+            {
+              "name": "Get User by ID (Public)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/user/:id",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "user", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "user-uuid-here"
+                    }
+                  ]
+                },
+                "description": "Get user details by user ID (public endpoint)"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Protected",
+          "description": "Protected authentication endpoints that require authentication",
+          "item": [
+            {
+              "name": "Get Current User (Me)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/me",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "me"]
+                },
+                "description": "Get current authenticated user details"
+              }
+            },
+            {
+              "name": "Change Password",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"oldPassword\": \"currentpassword123\",\n    \"newPassword\": \"newpassword123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/change-password",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "change-password"]
+                },
+                "description": "Change password for authenticated user"
+              }
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/logout",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "logout"]
+                },
+                "description": "Logout and invalidate tokens"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin Only",
+          "description": "Admin-only authentication management endpoints",
+          "item": [
+            {
+              "name": "Get All Businesses",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/getAllBusinesses",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "getAllBusinesses"]
+                },
+                "description": "Get all registered businesses (Admin only)"
+              }
+            },
+            {
+              "name": "Get All Businesses Not Activated",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/getAllBusinesses-notActivated",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "getAllBusinesses-notActivated"]
+                },
+                "description": "Get all businesses pending activation (Admin only)"
+              }
+            },
+            {
+              "name": "Get One User (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/getOneUser/:userId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "getOneUser", ":userId"],
+                  "variable": [
+                    {
+                      "key": "userId",
+                      "value": "user-uuid-here"
+                    }
+                  ]
+                },
+                "description": "Get user details by ID (Admin only)"
+              }
+            },
+            {
+              "name": "Verify Business",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/verify-users/:userId",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "verify-users", ":userId"],
+                  "variable": [
+                    {
+                      "key": "userId",
+                      "value": "user-uuid-here"
+                    }
+                  ]
+                },
+                "description": "Verify/activate a business account (Admin only)"
+              }
+            },
+            {
+              "name": "Get All Organizers",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/getAllOrganizers",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "getAllOrganizers"]
+                },
+                "description": "Get all registered organizers (Admin only)"
+              }
+            },
+            {
+              "name": "Get All Organizers Not Activated",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/getAllOrganizers-notActivated",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "getAllOrganizers-notActivated"]
+                },
+                "description": "Get all organizers pending activation (Admin only)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "User management endpoints",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"user-uuid-here\",\n    \"redeemPoints\": 0,\n    \"accountNumber\": \"1234567890\",\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "create"]
+            },
+            "description": "Create a new user profile"
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Get user by ID"
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Updated\",\n    \"accountNumber\": \"0987654321\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Update user details"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Delete a user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Business",
+      "description": "Business management endpoints",
+      "item": [
+        {
+          "name": "Create Business",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"business-uuid-here\",\n    \"name\": \"My Business\",\n    \"address\": \"123 Business St\",\n    \"city\": \"Business City\",\n    \"description\": \"A description of the business\",\n    \"phone_number\": \"+1234567890\",\n    \"email\": \"business@example.com\",\n    \"accountNumber\": \"ACC123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bussiness/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["bussiness", "create"]
+            },
+            "description": "Create a new business"
+          }
+        },
+        {
+          "name": "Get Business by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/bussiness/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["bussiness", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "business-uuid-here"
+                }
+              ]
+            },
+            "description": "Get business by ID"
+          }
+        },
+        {
+          "name": "Update Business",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Business Name\",\n    \"description\": \"Updated description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bussiness/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["bussiness", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "business-uuid-here"
+                }
+              ]
+            },
+            "description": "Update business details"
+          }
+        },
+        {
+          "name": "Delete Business",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/bussiness/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["bussiness", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "business-uuid-here"
+                }
+              ]
+            },
+            "description": "Delete a business"
+          }
+        },
+        {
+          "name": "Toggle Activate Business",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/bussiness/:id/toggle-activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["bussiness", ":id", "toggle-activate"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "business-uuid-here"
+                }
+              ]
+            },
+            "description": "Toggle business activation status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Organizer",
+      "description": "Organizer management endpoints",
+      "item": [
+        {
+          "name": "Create Organizer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"organizer-uuid-here\",\n    \"name\": \"Event Organizer\",\n    \"description\": \"Professional event organizer\",\n    \"email\": \"organizer@example.com\",\n    \"accountNumber\": \"ORG123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizer", "create"]
+            },
+            "description": "Create a new organizer"
+          }
+        },
+        {
+          "name": "Get Organizer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizer/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizer", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "organizer-uuid-here"
+                }
+              ]
+            },
+            "description": "Get organizer by ID"
+          }
+        },
+        {
+          "name": "Update Organizer",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Organizer Name\",\n    \"description\": \"Updated description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizer/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizer", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "organizer-uuid-here"
+                }
+              ]
+            },
+            "description": "Update organizer details"
+          }
+        },
+        {
+          "name": "Delete Organizer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizer/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizer", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "organizer-uuid-here"
+                }
+              ]
+            },
+            "description": "Delete an organizer"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Admin management endpoints",
+      "item": [
+        {
+          "name": "Create Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"admin-uuid-here\",\n    \"email\": \"admin@example.com\",\n    \"mainAccountNumber\": \"ADMIN123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "create"]
+            },
+            "description": "Create a new admin"
+          }
+        },
+        {
+          "name": "Get Admin by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "admin-uuid-here"
+                }
+              ]
+            },
+            "description": "Get admin by ID"
+          }
+        },
+        {
+          "name": "Update Admin",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"updated.admin@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "admin-uuid-here"
+                }
+              ]
+            },
+            "description": "Update admin details"
+          }
+        },
+        {
+          "name": "Delete Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "admin-uuid-here"
+                }
+              ]
+            },
+            "description": "Delete an admin"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CSR Projects",
+      "description": "Corporate Social Responsibility project endpoints",
+      "item": [
+        {
+          "name": "Create CSR Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"project-uuid-here\",\n    \"name\": \"Tree Planting Initiative\",\n    \"description\": \"A project to plant 1000 trees in the local area\",\n    \"startDate\": \"2026-02-01T00:00:00.000Z\",\n    \"endDate\": \"2026-06-01T00:00:00.000Z\",\n    \"location\": [6.9271, 79.8612]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/csr-project/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["csr-project", "create"]
+            },
+            "description": "Create a new CSR project (requires authentication)"
+          }
+        },
+        {
+          "name": "Get CSR Project by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/csr-project/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["csr-project", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "project-uuid-here"
+                }
+              ]
+            },
+            "description": "Get CSR project by ID"
+          }
+        },
+        {
+          "name": "Update CSR Project",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Project Name\",\n    \"description\": \"Updated project description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/csr-project/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["csr-project", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "project-uuid-here"
+                }
+              ]
+            },
+            "description": "Update CSR project details"
+          }
+        },
+        {
+          "name": "Delete CSR Project",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/csr-project/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["csr-project", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "project-uuid-here"
+                }
+              ]
+            },
+            "description": "Delete a CSR project"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Donations",
+      "description": "Donation management endpoints",
+      "item": [
+        {
+          "name": "Create Donation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 100.00,\n    \"csrId\": \"csr-project-uuid-here\",\n    \"userId\": \"user-uuid-here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/donation/create/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["donation", "create", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "csr-project-uuid-here"
+                }
+              ]
+            },
+            "description": "Create a new donation for a CSR project"
+          }
+        },
+        {
+          "name": "Get Donation by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/donation/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["donation", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "donation-uuid-here"
+                }
+              ]
+            },
+            "description": "Get donation by ID"
+          }
+        },
+        {
+          "name": "Update Donation",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 150.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/donation/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["donation", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "donation-uuid-here"
+                }
+              ]
+            },
+            "description": "Update donation details"
+          }
+        },
+        {
+          "name": "Delete Donation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/donation/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["donation", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "donation-uuid-here"
+                }
+              ]
+            },
+            "description": "Delete a donation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Offers",
+      "description": "Offer management endpoints",
+      "item": [
+        {
+          "name": "Create Offer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"offer_id\": \"offer-uuid-here\",\n    \"description\": \"Get 20% off on your next purchase\",\n    \"offerCode\": \"SAVE20\",\n    \"offerTitle\": \"20% Discount Offer\",\n    \"discountPercentage\": 20,\n    \"bussinessId\": \"business-uuid-here\",\n    \"redeemamountForGetTheOffer\": 100,\n    \"validUpTo\": \"2026-12-31T23:59:59.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/offers/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["offers", "create"]
+            },
+            "description": "Create a new offer"
+          }
+        },
+        {
+          "name": "Get Offer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/offers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["offers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "offer-uuid-here"
+                }
+              ]
+            },
+            "description": "Get offer by ID"
+          }
+        },
+        {
+          "name": "Update Offer",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"description\": \"Updated offer description\",\n    \"discountPercentage\": 25\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/offers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["offers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "offer-uuid-here"
+                }
+              ]
+            },
+            "description": "Update offer details"
+          }
+        },
+        {
+          "name": "Delete Offer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/offers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["offers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "offer-uuid-here"
+                }
+              ]
+            },
+            "description": "Delete an offer"
+          }
+        },
+        {
+          "name": "Get Available Offers for User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/offers/available/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["offers", "available", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Get all available offers for a specific user based on their redeem points"
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Offers",
+      "description": "User-offer relationship and redemption endpoints",
+      "item": [
+        {
+          "name": "Create User Offer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userId\": \"user-uuid-here\",\n    \"offerId\": \"offer-uuid-here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user-offers/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["user-offers", "create"]
+            },
+            "description": "Assign an offer to a user"
+          }
+        },
+        {
+          "name": "Get User Offer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user-offers/:userId/:offerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["user-offers", ":userId", ":offerId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "user-uuid-here"
+                },
+                {
+                  "key": "offerId",
+                  "value": "offer-uuid-here"
+                }
+              ]
+            },
+            "description": "Get a specific user-offer relationship"
+          }
+        },
+        {
+          "name": "Delete User Offer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user-offers/:userId/:offerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["user-offers", ":userId", ":offerId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "user-uuid-here"
+                },
+                {
+                  "key": "offerId",
+                  "value": "offer-uuid-here"
+                }
+              ]
+            },
+            "description": "Remove an offer from a user"
+          }
+        },
+        {
+          "name": "Redeem Offer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"totalBill\": \"150.00\",\n    \"offerCode\": \"SAVE20\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user-offers/redeem/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["user-offers", "redeem", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Redeem an offer for a user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stripe Payments",
+      "description": "Stripe payment integration endpoints",
+      "item": [
+        {
+          "name": "Create Checkout Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 5000,\n    \"projectId\": \"csr-project-uuid-here\",\n    \"userId\": \"user-uuid-here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stripe/checkout",
+              "host": ["{{baseUrl}}"],
+              "path": ["stripe", "checkout"]
+            },
+            "description": "Create a Stripe checkout session for donations. Amount is in cents."
+          }
+        },
+        {
+          "name": "Stripe Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "stripe-signature",
+                "value": "your-stripe-signature"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stripe/webhook",
+              "host": ["{{baseUrl}}"],
+              "path": ["stripe", "webhook"]
+            },
+            "description": "Stripe webhook endpoint for payment events. This is called by Stripe, not directly by users."
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ]
+}
