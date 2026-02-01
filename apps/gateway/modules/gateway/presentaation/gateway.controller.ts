@@ -24,14 +24,28 @@ export class GatewayController {
     @Req() req,
     @Headers() headers: any,
     @CurrentUser('role') userRole: string | undefined,
+    @Res() res: Response,
   ) {
-    return this.gatewayService.forwardRequest(
+    const response = await this.gatewayService.forwardRequest(
       req.method,
       req.url,
       userRole,
       undefined,
       headers,
     );
+    // Forward all headers from the service response
+    if (response.headers) {
+      Object.entries(response.headers).forEach(([key, value]) => {
+        res.setHeader(key, value as unknown as string | number);
+      });
+    }
+
+    // Forward cookies if they exist in Set-Cookie header
+    if (response.headers?.['set-cookie']) {
+      res.setHeader('Set-Cookie', response.headers['set-cookie']);
+    }
+
+    return res.status(response.status).send(response.data);
   }
 
   @Post('*')
@@ -88,18 +102,32 @@ export class GatewayController {
     @Body() body: any,
     @Headers() headers: any,
     @CurrentUser('role') userRole: string | undefined,
+    @Res() res: Response,
   ) {
     const contentType = headers?.['content-type'] || headers?.['Content-Type'];
     const isMultipart =
       contentType && contentType.includes('multipart/form-data');
     const payload = isMultipart ? req : body;
-    return this.gatewayService.forwardRequest(
+    const response = await this.gatewayService.forwardRequest(
       req.method,
       req.url,
       userRole,
       payload,
       headers,
     );
+    // Forward all headers from the service response
+    if (response.headers) {
+      Object.entries(response.headers).forEach(([key, value]) => {
+        res.setHeader(key, value as unknown as string | number);
+      });
+    }
+
+    // Forward cookies if they exist in Set-Cookie header
+    if (response.headers?.['set-cookie']) {
+      res.setHeader('Set-Cookie', response.headers['set-cookie']);
+    }
+
+    return res.status(response.status).send(response.data);
   }
 
   @Patch('*')
@@ -108,18 +136,32 @@ export class GatewayController {
     @Body() body: any,
     @Headers() headers: any,
     @CurrentUser('role') userRole: string | undefined,
+    @Res() res: Response,
   ) {
     const contentType = headers?.['content-type'] || headers?.['Content-Type'];
     const isMultipart =
       contentType && contentType.includes('multipart/form-data');
     const payload = isMultipart ? req : body;
-    return this.gatewayService.forwardRequest(
+    const response = await this.gatewayService.forwardRequest(
       req.method,
       req.url,
       userRole,
       payload,
       headers,
     );
+    // Forward all headers from the service response
+    if (response.headers) {
+      Object.entries(response.headers).forEach(([key, value]) => {
+        res.setHeader(key, value as unknown as string | number);
+      });
+    }
+
+    // Forward cookies if they exist in Set-Cookie header
+    if (response.headers?.['set-cookie']) {
+      res.setHeader('Set-Cookie', response.headers['set-cookie']);
+    }
+
+    return res.status(response.status).send(response.data);
   }
 
   @Delete('*')
@@ -127,13 +169,27 @@ export class GatewayController {
     @Req() req,
     @Headers() headers: any,
     @CurrentUser('role') userRole: string | undefined,
+    @Res() res: Response,
   ) {
-    return this.gatewayService.forwardRequest(
+    const response = await this.gatewayService.forwardRequest(
       req.method,
       req.url,
       userRole,
       undefined,
       headers,
     );
+    // Forward all headers from the service response
+    if (response.headers) {
+      Object.entries(response.headers).forEach(([key, value]) => {
+        res.setHeader(key, value as unknown as string | number);
+      });
+    }
+
+    // Forward cookies if they exist in Set-Cookie header
+    if (response.headers?.['set-cookie']) {
+      res.setHeader('Set-Cookie', response.headers['set-cookie']);
+    }
+
+    return res.status(response.status).send(response.data);
   }
 }

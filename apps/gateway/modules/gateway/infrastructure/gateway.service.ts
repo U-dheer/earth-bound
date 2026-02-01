@@ -1,14 +1,18 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { resolveServiceUrl } from '../utils/url-resolver';
 import axios from 'axios';
 import { AxiosError } from 'axios';
 import { AuthenticatedUser } from '../auth';
+import { response } from 'express';
 
 @Injectable()
 export class GatewayService {
@@ -55,7 +59,7 @@ export class GatewayService {
         withCredentials: true,
       });
 
-      return method === 'POST' ? response : response.data;
+      return response;
     } catch (error) {
       // Re-throw NestJS HTTP exceptions (ForbiddenException, NotFoundException, etc.)
       if (
@@ -71,7 +75,26 @@ export class GatewayService {
           responseData: error.response?.data,
           status: error.response?.status,
         });
-        throw new BadRequestException(error.response?.data);
+        switch (error.status) {
+          case 400:
+            throw new BadRequestException(error.response?.data);
+          case 401:
+            throw new UnauthorizedException(error.response?.data);
+          case 403:
+            throw new ForbiddenException(error.response?.data);
+          case 404:
+            throw new NotFoundException(error.response?.data);
+          case 409:
+            throw new ConflictException(error.response?.data);
+          case 422:
+            throw new UnprocessableEntityException(error.response?.data);
+          case 500:
+            throw new InternalServerErrorException(error.response?.data);
+          default:
+            throw new InternalServerErrorException(
+              error.response?.data || error.message,
+            );
+        }
       } else {
         console.error('Unexpected error in GatewayService:', error);
         throw new InternalServerErrorException(error.message);

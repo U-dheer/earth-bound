@@ -3,6 +3,7 @@ import {
   Body,
   Inject,
   Injectable,
+  NotFoundException,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -60,7 +61,7 @@ export class AuthService {
     } catch (error) {
       console.error('Error in signUp:', error.message);
       console.error(error);
-      throw new BadRequestException('Error in creating user in user service');
+      throw new BadRequestException(error.message);
     }
 
     return { message: 'User created successfully' };
@@ -159,7 +160,7 @@ export class AuthService {
 
     const user = await this.userModel.findById(storedRefreashToken.userId);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     // Verify token version from JWT matches (hasn't been revoked before)
@@ -192,7 +193,7 @@ export class AuthService {
     console.log('Changing password for userId:', userId);
     const user = await this.userModel.findById(userId);
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     const isMatch = await bcrypt.compare(oldPassword, user.password);
@@ -216,7 +217,7 @@ export class AuthService {
   async forgotPassword(email: string) {
     const user = await this.userModel.findOne({ email: email });
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
     const OTP = randomInt(100000, 999999).toString();
     const expiryDate = new Date(Date.now() + 3600 * 1000);
@@ -279,7 +280,7 @@ export class AuthService {
   async getMe(userId: string) {
     if (!userId) throw new BadRequestException('User ID is required');
     const user = await this.userModel.findById(userId).select('-password');
-    if (!user) throw new BadRequestException('User not found');
+    if (!user) throw new NotFoundException('User not found');
     return user;
   }
 
@@ -291,7 +292,7 @@ export class AuthService {
   async logout(userId: string) {
     const user = await this.userModel.findById(userId);
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     // Increment token version to invalidate ALL existing tokens
@@ -313,7 +314,7 @@ export class AuthService {
     const user = await this.userModel
       .findById(payload.userId)
       .select('-password');
-    if (!user) throw new BadRequestException('User not found');
+    if (!user) throw new NotFoundException('User not found');
     return user;
   }
   signUpData;
@@ -332,18 +333,18 @@ export class AuthService {
     try {
       const user = await this.userModel.findById(userId).select('-password');
       if (!user) {
-        throw new BadRequestException('User not found');
+        throw new NotFoundException('User not found');
       }
       return user;
     } catch {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
   }
 
   async verifyBusiness(userId: string) {
     const user = await this.userModel.findById(userId);
     if (!user) {
-      throw new BadRequestException('user not found');
+      throw new NotFoundException('user not found');
     }
     if (user.isActive === false) {
       user.isActive = true;
@@ -401,7 +402,7 @@ export class AuthService {
   async updateUser(userId: string, dto: Partial<CreateUserDto>) {
     const user = await this.userModel.findById(userId);
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     // Update only allowed fields
