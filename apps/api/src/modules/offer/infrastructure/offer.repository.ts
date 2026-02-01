@@ -68,4 +68,9 @@ export class OfferRepository {
       .execute();
     return [avilableOffers];
   }
+
+  async getAllOffers() {
+    const allOffers = await this.db.select().from(offers).execute();
+    return allOffers;
+  }
 }

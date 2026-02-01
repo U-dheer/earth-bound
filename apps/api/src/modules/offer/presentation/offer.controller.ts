@@ -15,12 +15,12 @@ import { FindOfferByIdUseCase } from '../application/find-offer-by-id.usecase';
 import { UpdateOfferUseCase } from '../application/update-offer.usecase';
 import { DeleteOfferUseCase } from '../application/delete-offer.usecase';
 import { GetAvailableOffersUseCase } from '../application/get-available-offers.usecase';
+import { GetAllOffersUseCase } from '../application/get-all-offers.usecase';
 import { CreateOfferDto } from '../dto/createoffer.dto';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 @Controller('offers')
-@UseGuards(AuthGuard)
 export class OfferController {
   constructor(
     private readonly createOfferUsecase: CreateOffersUseCase,
@@ -28,7 +28,14 @@ export class OfferController {
     private readonly updateOfferUseCase: UpdateOfferUseCase,
     private readonly deleteOfferUseCase: DeleteOfferUseCase,
     private readonly getAvailableOffersUseCase: GetAvailableOffersUseCase,
+    private readonly getAllOffersUseCase: GetAllOffersUseCase,
   ) {}
+
+  // Public endpoint - no auth required
+  @Get('all')
+  async getAllOffers() {
+    return await this.getAllOffersUseCase.execute();
+  }
 
   @Post('create')
   async createOffer(

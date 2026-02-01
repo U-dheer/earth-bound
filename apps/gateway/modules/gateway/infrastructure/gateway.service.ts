@@ -1,22 +1,26 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { resolveServiceUrl } from '../utils/url-resolver';
 import axios from 'axios';
 import { AxiosError } from 'axios';
+import { AuthenticatedUser } from '../auth';
 
 @Injectable()
 export class GatewayService {
   async forwardRequest(
     method: string,
     path: string,
+    role?: AuthenticatedUser['role'],
     body?: any,
     headers?: any,
   ): Promise<any> {
     try {
-      const serviceUrl = resolveServiceUrl(path);
+      const serviceUrl = resolveServiceUrl(path, role, method);
       console.log(`Resolved service URL: ${path}`);
 
       console.log(`Forwarding request to: ${serviceUrl}${path}`);
@@ -53,6 +57,14 @@ export class GatewayService {
 
       return method === 'POST' ? response : response.data;
     } catch (error) {
+      // Re-throw NestJS HTTP exceptions (ForbiddenException, NotFoundException, etc.)
+      if (
+        error instanceof ForbiddenException ||
+        error instanceof NotFoundException
+      ) {
+        throw error;
+      }
+
       if (error instanceof AxiosError) {
         console.error('Error in GatewayService Axios request:', {
           message: error.message,

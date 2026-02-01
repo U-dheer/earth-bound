@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserOfferUseCase } from '../application/create-user-offer.usecase';
 import { FindUserOfferUseCase } from '../application/find-user-offer.usecase';
 import { DeleteUserOfferUseCase } from '../application/delete-user-offer.usecase';

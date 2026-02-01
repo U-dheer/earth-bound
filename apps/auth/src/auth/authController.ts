@@ -33,6 +33,7 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() signUpData: any) {
+    console.log('Received signUpData:', signUpData);
     return this.authService.signUp(signUpData);
   }
 
@@ -98,8 +99,9 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Body() forgottenemail: forgotPasswordDto) {
-    return this.authService.forgotPassword(forgottenemail.email);
+  async forgotPassword(@Body() dto: any) {
+    console.log('Received forgot password request for:', dto.email);
+    return this.authService.forgotPassword(dto.email);
   }
 
   @Post('reset-password')

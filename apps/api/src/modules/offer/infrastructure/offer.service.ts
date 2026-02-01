@@ -25,4 +25,8 @@ export class OfferService {
   async getAvailableOffers(userId: any) {
     return this.offerRepository.getAvailableOffers(userId);
   }
+
+  async getAllOffers() {
+    return this.offerRepository.getAllOffers();
+  }
 }

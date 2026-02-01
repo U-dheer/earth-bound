@@ -9,19 +9,26 @@ import {
   Put,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { GatewayService } from '../infrastructure/gateway.service';
 import { type Response } from 'express';
+import { type AuthenticatedUser, CurrentUser } from '../auth';
 
 @Controller()
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}
 
   @Get('*')
-  async forwardGet(@Req() req, @Headers() headers: any) {
+  async forwardGet(
+    @Req() req,
+    @Headers() headers: any,
+    @CurrentUser('role') userRole: string | undefined,
+  ) {
     return this.gatewayService.forwardRequest(
       req.method,
       req.url,
+      userRole,
       undefined,
       headers,
     );
@@ -31,6 +38,7 @@ export class GatewayController {
   async forwardPost(
     @Req() req,
     @Body() body: any,
+    @CurrentUser('role') userRole: string | undefined,
     @Headers() headers: any,
     @Res() res: Response,
   ) {
@@ -54,6 +62,7 @@ export class GatewayController {
     const response = await this.gatewayService.forwardRequest(
       req.method,
       req.url,
+      userRole,
       payload,
       headersWithCookies,
     );
@@ -74,7 +83,12 @@ export class GatewayController {
   }
 
   @Put('*')
-  async forwardPut(@Req() req, @Body() body: any, @Headers() headers: any) {
+  async forwardPut(
+    @Req() req,
+    @Body() body: any,
+    @Headers() headers: any,
+    @CurrentUser('role') userRole: string | undefined,
+  ) {
     const contentType = headers?.['content-type'] || headers?.['Content-Type'];
     const isMultipart =
       contentType && contentType.includes('multipart/form-data');
@@ -82,13 +96,19 @@ export class GatewayController {
     return this.gatewayService.forwardRequest(
       req.method,
       req.url,
+      userRole,
       payload,
       headers,
     );
   }
 
   @Patch('*')
-  async forwardPatch(@Req() req, @Body() body: any, @Headers() headers: any) {
+  async forwardPatch(
+    @Req() req,
+    @Body() body: any,
+    @Headers() headers: any,
+    @CurrentUser('role') userRole: string | undefined,
+  ) {
     const contentType = headers?.['content-type'] || headers?.['Content-Type'];
     const isMultipart =
       contentType && contentType.includes('multipart/form-data');
@@ -96,6 +116,7 @@ export class GatewayController {
     return this.gatewayService.forwardRequest(
       req.method,
       req.url,
+      userRole,
       payload,
       headers,
     );

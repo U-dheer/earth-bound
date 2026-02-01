@@ -14,11 +14,10 @@ import { FindUserByIdUseCase } from '../application/find-user-by-id.usecase';
 import { UpdateUserUseCase } from '../application/update-user.usecase';
 import { DeleteUserUseCase } from '../application/delete-user.usecase';
 import { CreateUserDto } from '../dto/user.dto';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 @Controller('user')
-@UseGuards(AuthGuard)
 export class UserController {
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
@@ -33,6 +32,7 @@ export class UserController {
   }
 
   @Get('')
+  @UseGuards(AuthGuard)
   async findById(@CurrentUser('userId') userId: any) {
     return await this.findUserByIdUseCase.execute(userId);
   }
