@@ -5,6 +5,7 @@ import { DonationRepository } from './infrastructure/donation.repository';
 import { DonationService } from './infrastructure/donation.service';
 import { CreateDonationUsecase } from './application/createDonationUsecase';
 import { FindDonationByIdUseCase } from './application/find-donation-by-id.usecase';
+import { FindAllDonationsUseCase } from './application/find-all-donations.usecase';
 import { UpdateDonationUseCase } from './application/update-donation.usecase';
 import { DeleteDonationUseCase } from './application/delete-donation.usecase';
 import { UserModule } from '../user/user.module';
@@ -17,6 +18,7 @@ import { UserModule } from '../user/user.module';
     DonationService,
     CreateDonationUsecase,
     FindDonationByIdUseCase,
+    FindAllDonationsUseCase,
     UpdateDonationUseCase,
     DeleteDonationUseCase,
   ],

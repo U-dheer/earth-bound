@@ -1,7 +1,17 @@
-import { Controller, Post, Req, Res, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Req,
+  Res,
+  Headers,
+  UseGuards,
+  Param,
+} from '@nestjs/common';
 import { StripeService } from '../infrastructure/stripe.service';
 import type { Request, Response } from 'express';
 import { HandeledWebhookUsecase } from '../application/handeled_webhook.usecase';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 
 @Controller('stripe')
 export class StripeController {
@@ -10,9 +20,14 @@ export class StripeController {
     private webhookUsecase: HandeledWebhookUsecase,
   ) {}
 
-  @Post('checkout')
-  async checkout(@Req() req: Request) {
-    const { amount, projectId, userId } = req.body;
+  @Post('checkout/:id')
+  @UseGuards(AuthGuard)
+  async checkout(
+    @Req() req: Request,
+    @CurrentUser('userId') userId: string,
+    @Param('id') projectId: string,
+  ) {
+    const { amount } = req.body;
 
     const session = await this.stripeService.createCheckoutSession({
       amount,
@@ -30,13 +45,14 @@ export class StripeController {
     @Res() res: Response,
   ) {
     try {
-      const event = this.stripeService.constructEvent(req.body, signature);
-      return await this.webhookUsecase.execute(event);
+      const rawBody = req.body as Buffer;
+      console.log('Received webhook payload');
+      const event = this.stripeService.constructEvent(rawBody, signature);
+      await this.webhookUsecase.execute(event);
+      return res.json({ received: true });
     } catch (err) {
       console.log(`Webhook Error: ${err.message}`);
-      return res.status(400).send(`Webhook Error`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
     }
-
-    res.json({ received: true });
   }
 }

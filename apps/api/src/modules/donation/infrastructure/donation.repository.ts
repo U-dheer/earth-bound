@@ -37,6 +37,11 @@ export class DonationRepository {
     return result;
   }
 
+  async findAll() {
+    const result = await this.db.select().from(donations).execute();
+    return result;
+  }
+
   async update(id: string, data: Partial<CreateDonationDto>) {
     const [result] = await this.db
       .update(donations)

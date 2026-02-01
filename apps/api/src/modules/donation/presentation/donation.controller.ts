@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateDonationUsecase } from '../application/createDonationUsecase';
 import { FindDonationByIdUseCase } from '../application/find-donation-by-id.usecase';
+import { FindAllDonationsUseCase } from '../application/find-all-donations.usecase';
 import { UpdateDonationUseCase } from '../application/update-donation.usecase';
 import { DeleteDonationUseCase } from '../application/delete-donation.usecase';
 import { CreateDonationDto } from '../dto/createDonation.dto';
@@ -18,6 +19,7 @@ export class DonationController {
   constructor(
     private readonly createDonationUsecase: CreateDonationUsecase,
     private readonly findDonationByIdUseCase: FindDonationByIdUseCase,
+    private readonly findAllDonationsUseCase: FindAllDonationsUseCase,
     private readonly updateDonationUseCase: UpdateDonationUseCase,
     private readonly deleteDonationUseCase: DeleteDonationUseCase,
   ) {}
@@ -28,6 +30,11 @@ export class DonationController {
     @Param('id') id: string,
   ) {
     return await this.createDonationUsecase.execute(dto, id);
+  }
+
+  @Get()
+  async findAll() {
+    return await this.findAllDonationsUseCase.execute();
   }
 
   @Get(':id')

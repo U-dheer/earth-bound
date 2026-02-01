@@ -8,7 +8,6 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserUsecase } from '../application/create-user.uscase';
 import { FindUserByIdUseCase } from '../application/find-user-by-id.usecase';
 import { UpdateUserUseCase } from '../application/update-user.usecase';
@@ -31,10 +30,15 @@ export class UserController {
     return await this.createUserUsecase.execute(dto);
   }
 
-  @Get('')
+  @Get()
   @UseGuards(AuthGuard)
   async findById(@CurrentUser('userId') userId: any) {
     return await this.findUserByIdUseCase.execute(userId);
+  }
+
+  @Get(':id')
+  async findUserById(@Param('id') id: string) {
+    return await this.findUserByIdUseCase.execute(id);
   }
 
   @Patch(':id')

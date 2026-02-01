@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.use('/stripe/webhook', bodyParser.raw({ type: 'application/json' }));
+  app.use('/api/stripe/webhook', bodyParser.raw({ type: 'application/json' }));
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
