@@ -22,7 +22,7 @@ export class BussinessService {
     return this.bussinessRepository.delete(id);
   }
 
-  async toggleActivate(id: string) {
-    return this.bussinessRepository.toggleActivate(id);
-  }
+  // async toggleActivate(id: string) {
+  //   return this.bussinessRepository.toggleActivate(id);
+  // }
 }

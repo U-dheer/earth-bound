@@ -43,25 +43,25 @@ export class BussinessRepository {
     return result;
   }
 
-  async toggleActivate(id: string) {
-    const business = await this.findById(id);
-    if (!business) {
-      throw new Error('Business not found');
-    }
-    if (business.isActive === true) {
-      const updatedBusiness = await this.db
-        .update(businesses)
-        .set({ isActive: false })
-        .where(eq(businesses.id, id))
-        .returning();
-      return updatedBusiness;
-    } else if (business.isActive === false) {
-      const updatedBusiness = await this.db
-        .update(businesses)
-        .set({ isActive: true })
-        .where(eq(businesses.id, id))
-        .returning();
-      return updatedBusiness;
-    }
-  }
+  // async toggleActivate(id: string) {
+  //   const business = await this.findById(id);
+  //   if (!business) {
+  //     throw new Error('Business not found');
+  //   }
+  //   if (business.isActive === true) {
+  //     const updatedBusiness = await this.db
+  //       .update(businesses)
+  //       .set({ isActive: false })
+  //       .where(eq(businesses.id, id))
+  //       .returning();
+  //     return updatedBusiness;
+  //   } else if (business.isActive === false) {
+  //     const updatedBusiness = await this.db
+  //       .update(businesses)
+  //       .set({ isActive: true })
+  //       .where(eq(businesses.id, id))
+  //       .returning();
+  //     return updatedBusiness;
+  // //   }
+  // }
 }

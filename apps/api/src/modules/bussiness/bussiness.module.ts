@@ -7,7 +7,7 @@ import { CreateBussinessUsecase } from './application/create-bussiness.usecase';
 import { FindBussinessByIdUseCase } from './application/find-bussiness-by-id.usecase';
 import { UpdateBussinessUseCase } from './application/update-bussiness.usecase';
 import { DeleteBussinessUseCase } from './application/delete-bussiness.usecase';
-import { ToggleActivateBussinessUseCase } from './application/toggle-activate-bussiness-usecase';
+// import { ToggleActivateBussinessUseCase } from './application/toggle-activate-bussiness-usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -19,7 +19,7 @@ import { ToggleActivateBussinessUseCase } from './application/toggle-activate-bu
     FindBussinessByIdUseCase,
     UpdateBussinessUseCase,
     DeleteBussinessUseCase,
-    ToggleActivateBussinessUseCase,
+    // ToggleActivateBussinessUseCase,
   ],
   exports: [BussinessService, BussinessRepository],
 })
