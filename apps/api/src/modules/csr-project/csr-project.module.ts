@@ -5,6 +5,7 @@ import { CsrProjectRepository } from './infrastructure/csr-project.repository';
 import { CsrProjectService } from './infrastructure/csr-project.service';
 import { CreateCsrProjectUsecase } from './application/create-project.usecase';
 import { FindCsrProjectByIdUseCase } from './application/find-csr-project-by-id.usecase';
+import { FindAllCsrProjectsUseCase } from './application/find-all-csr-projects.usecase';
 import { UpdateCsrProjectUseCase } from './application/update-csr-project.usecase';
 import { DeleteCsrProjectUseCase } from './application/delete-csr-project.usecase';
 
@@ -16,6 +17,7 @@ import { DeleteCsrProjectUseCase } from './application/delete-csr-project.usecas
     CsrProjectService,
     CreateCsrProjectUsecase,
     FindCsrProjectByIdUseCase,
+    FindAllCsrProjectsUseCase,
     UpdateCsrProjectUseCase,
     DeleteCsrProjectUseCase,
   ],

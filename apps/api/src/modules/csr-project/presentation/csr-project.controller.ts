@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreateCsrProjectUsecase } from '../application/create-project.usecase';
 import { FindCsrProjectByIdUseCase } from '../application/find-csr-project-by-id.usecase';
+import { FindAllCsrProjectsUseCase } from '../application/find-all-csr-projects.usecase';
 import { UpdateCsrProjectUseCase } from '../application/update-csr-project.usecase';
 import { DeleteCsrProjectUseCase } from '../application/delete-csr-project.usecase';
 import { CreateCsrDto } from '../dto/create_csr-project.dto';
@@ -22,6 +23,7 @@ export class CsrProjectController {
   constructor(
     private readonly createCsrProjectUsecase: CreateCsrProjectUsecase,
     private readonly findCsrProjectByIdUseCase: FindCsrProjectByIdUseCase,
+    private readonly findAllCsrProjectsUseCase: FindAllCsrProjectsUseCase,
     private readonly updateCsrProjectUseCase: UpdateCsrProjectUseCase,
     private readonly deleteCsrProjectUseCase: DeleteCsrProjectUseCase,
   ) {}
@@ -33,6 +35,11 @@ export class CsrProjectController {
   ) {
     console.log('Organizer ID:', organizerId);
     return await this.createCsrProjectUsecase.execute(dto, organizerId);
+  }
+
+  @Get()
+  async findAll() {
+    return await this.findAllCsrProjectsUseCase.execute();
   }
 
   @Get(':id')
@@ -49,5 +56,4 @@ export class CsrProjectController {
   async delete(@Param('id') id: string) {
     return await this.deleteCsrProjectUseCase.execute(id);
   }
-  //hgvhgvhgv
 }

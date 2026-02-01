@@ -21,4 +21,8 @@ export class CsrProjectService {
   async delete(id: string) {
     return this.csrProjectRepository.delete(id);
   }
+
+  async findAll() {
+    return this.csrProjectRepository.findAll();
+  }
 }

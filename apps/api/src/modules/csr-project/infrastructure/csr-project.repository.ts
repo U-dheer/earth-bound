@@ -45,4 +45,9 @@ export class CsrProjectRepository {
 
     return result;
   }
+
+  async findAll() {
+    const results = await this.db.select().from(csrEvents).execute();
+    return results;
+  }
 }
