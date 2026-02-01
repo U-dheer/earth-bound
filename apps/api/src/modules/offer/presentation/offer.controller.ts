@@ -46,6 +46,7 @@ export class OfferController {
   }
 
   @Get('available')
+  @UseGuards(AuthGuard)
   async getAvailableOffers(@CurrentUser('userId') userId: any) {
     return await this.getAvailableOffersUseCase.execute(userId);
   }
