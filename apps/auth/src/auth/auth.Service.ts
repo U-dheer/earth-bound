@@ -281,7 +281,12 @@ export class AuthService {
     if (!userId) throw new BadRequestException('User ID is required');
     const user = await this.userModel.findById(userId).select('-password');
     if (!user) throw new NotFoundException('User not found');
-    return user;
+
+    const userInApi = await axios.get(
+      `http://localhost:3000/api/user/${userId}`,
+    );
+    if (!user) throw new NotFoundException('User not found');
+    return userInApi.data;
   }
 
   /**
