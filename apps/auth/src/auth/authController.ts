@@ -152,7 +152,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(RolesEnum.ADMIN)
-  @Post('verify-users/:userId')
+  @Patch('verify-users/:userId')
   async verifyBussiness(@Param('userId') userId: string) {
     return this.authService.verifyBusiness(userId);
   }
