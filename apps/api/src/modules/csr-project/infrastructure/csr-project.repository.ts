@@ -50,4 +50,14 @@ export class CsrProjectRepository {
     const results = await this.db.select().from(csrEvents).execute();
     return results;
   }
+
+  async toggleStatus(id: string, isApproved: boolean) {
+    const [result] = await this.db
+      .update(csrEvents)
+      .set({ isApproved })
+      .where(eq(csrEvents.id, id))
+      .returning();
+
+    return result;
+  }
 }

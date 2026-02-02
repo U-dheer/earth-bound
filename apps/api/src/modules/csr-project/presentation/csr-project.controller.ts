@@ -13,6 +13,7 @@ import { FindCsrProjectByIdUseCase } from '../application/find-csr-project-by-id
 import { FindAllCsrProjectsUseCase } from '../application/find-all-csr-projects.usecase';
 import { UpdateCsrProjectUseCase } from '../application/update-csr-project.usecase';
 import { DeleteCsrProjectUseCase } from '../application/delete-csr-project.usecase';
+import { ToggleCsrProjectStatusUseCase } from '../application/toggle-csr-project-status.usecase';
 import { CreateCsrDto } from '../dto/create_csr-project.dto';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import { AuthGuard } from '../../../shared/guards/auth.guard';
@@ -26,6 +27,7 @@ export class CsrProjectController {
     private readonly findAllCsrProjectsUseCase: FindAllCsrProjectsUseCase,
     private readonly updateCsrProjectUseCase: UpdateCsrProjectUseCase,
     private readonly deleteCsrProjectUseCase: DeleteCsrProjectUseCase,
+    private readonly toggleCsrProjectStatusUseCase: ToggleCsrProjectStatusUseCase,
   ) {}
 
   @Post('create')
@@ -55,5 +57,10 @@ export class CsrProjectController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return await this.deleteCsrProjectUseCase.execute(id);
+  }
+
+  @Patch('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    return await this.toggleCsrProjectStatusUseCase.execute(id);
   }
 }

@@ -140,7 +140,7 @@ const serviceRoutes: ServiceRouteConfig[] = [
       {
         path: '/csr-project',
         allowedRoles: [UserRole.ADMIN, UserRole.ORGANIZER],
-        methods: ['POST', 'PUT', 'DELETE'],
+        methods: ['POST', 'PUT', 'DELETE', 'PATCH'],
       },
       { path: '/csr-project', methods: ['GET'], isPublic: true },
 
