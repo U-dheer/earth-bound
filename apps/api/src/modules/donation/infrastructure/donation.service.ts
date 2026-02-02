@@ -6,8 +6,8 @@ import { CreateDonationDto } from '../dto/createDonation.dto';
 export class DonationService {
   constructor(private readonly donationRepository: DonationRepository) {}
 
-  async createDonation(donationData: CreateDonationDto, id: string) {
-    return this.donationRepository.create(donationData, id);
+  async createDonation(donationData: CreateDonationDto) {
+    return this.donationRepository.create(donationData);
   }
 
   async findById(id: string) {

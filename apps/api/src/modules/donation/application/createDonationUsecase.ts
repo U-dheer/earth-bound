@@ -11,9 +11,9 @@ export class CreateDonationUsecase {
     private readonly userService: UserService,
   ) {}
 
-  async execute(data: CreateDonationDto, id: string) {
+  async execute(data: CreateDonationDto) {
     try {
-      const donation = await this.donationService.createDonation(data, id);
+      const donation = await this.donationService.createDonation(data);
 
       const user = await this.userService.findUserById(data.userId);
       if (!user) {

@@ -8,29 +8,31 @@ export class HandeledWebhookUsecase {
 
   async execute(event: Stripe.Event) {
     try {
-      if (event.type === 'checkout.session.completed') {
-        const session = event.data.object;
+      if (
+        event.type === 'checkout.session.completed' ||
+        event.type === 'payment_intent.created'
+      ) {
+        const eventObject = event.data.object;
 
-        console.log('Checkout session completed:', session);
+        console.log(`${event.type} event received:`, eventObject);
 
-        const userId = session.metadata?.userId;
-        const projectId = session.metadata?.projectId;
-        const amount = Number(session.metadata?.amount);
+        const metadata = eventObject.metadata;
+        const userId = metadata?.userId;
+        const projectId = metadata?.projectId;
+        const amount = Number(metadata?.amount);
 
         if (!userId || !projectId || !amount) {
-          throw new BadRequestException(
-            'Missing required metadata: userId, projectId, or amount',
+          console.log(
+            `Skipping ${event.type}: Missing required metadata (userId, projectId, or amount)`,
           );
+          return;
         }
 
-        await this.createDonationUsecase.execute(
-          {
-            userId: userId,
-            csrId: projectId,
-            amount: amount,
-          },
-          projectId,
-        );
+        await this.createDonationUsecase.execute({
+          userId: userId,
+          csrId: projectId,
+          amount: amount,
+        });
       } else {
         console.log(`Unhandled event type: ${event.type}`);
         return;

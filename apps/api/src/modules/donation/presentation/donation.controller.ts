@@ -29,7 +29,7 @@ export class DonationController {
     @Body() dto: CreateDonationDto,
     @Param('id') id: string,
   ) {
-    return await this.createDonationUsecase.execute(dto, id);
+    return await this.createDonationUsecase.execute(dto);
   }
 
   @Get()

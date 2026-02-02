@@ -1,5 +1,5 @@
 export class CreateDonationDto {
   amount: number;
-  csrId?: string;
+  csrId: string;
   userId: string;
 }
