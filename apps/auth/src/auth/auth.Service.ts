@@ -387,6 +387,30 @@ export class AuthService {
     };
   }
 
+  async toggleUserActiveStatus(userId: string) {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const allowedRoles = ['ORGANIZER', 'BUSINESS', 'USER'];
+    if (!allowedRoles.includes(user.role)) {
+      throw new BadRequestException(
+        `Cannot toggle active status for role: ${user.role}`,
+      );
+    }
+
+    user.isActive = !user.isActive;
+    await user.save();
+
+    return {
+      message: `${user.role} status toggled to ${user.isActive ? 'active' : 'inactive'}`,
+      userId: user._id,
+      role: user.role,
+      isActive: user.isActive,
+    };
+  }
+
   async getAllUsers() {
     return this.userModel.find({ role: 'USER' }).select('-password');
   }

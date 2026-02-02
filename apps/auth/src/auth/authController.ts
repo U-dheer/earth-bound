@@ -186,6 +186,13 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard, RolesGuard)
+  @Roles(RolesEnum.ADMIN)
+  @Patch('toggle-user-active-status/:userId')
+  async toggleUserActiveStatus(@Param('userId') userId: string) {
+    return this.authService.toggleUserActiveStatus(userId);
+  }
+
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(RolesEnum.ADMIN, RolesEnum.ORGANIZER, RolesEnum.BUSINESS)
   @Get('getAllUsers')
   async getAllUsers() {
