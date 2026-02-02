@@ -29,4 +29,8 @@ export class CsrProjectService {
   async toggleStatus(id: string, isApproved: boolean) {
     return this.csrProjectRepository.toggleStatus(id, isApproved);
   }
+
+  async findByActivationStatus(isApproved: boolean) {
+    return this.csrProjectRepository.findByActivationStatus(isApproved);
+  }
 }

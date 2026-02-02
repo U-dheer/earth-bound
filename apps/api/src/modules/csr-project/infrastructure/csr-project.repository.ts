@@ -60,4 +60,13 @@ export class CsrProjectRepository {
 
     return result;
   }
+
+  async findByActivationStatus(isApproved: boolean) {
+    const results = await this.db
+      .select()
+      .from(csrEvents)
+      .where(eq(csrEvents.isApproved, isApproved))
+      .execute();
+    return results;
+  }
 }

@@ -14,6 +14,8 @@ import { FindAllCsrProjectsUseCase } from '../application/find-all-csr-projects.
 import { UpdateCsrProjectUseCase } from '../application/update-csr-project.usecase';
 import { DeleteCsrProjectUseCase } from '../application/delete-csr-project.usecase';
 import { ToggleCsrProjectStatusUseCase } from '../application/toggle-csr-project-status.usecase';
+import { FindActivatedCsrProjectsUseCase } from '../application/find-activated-csr-projects.usecase';
+import { FindDeactivatedCsrProjectsUseCase } from '../application/find-deactivated-csr-projects.usecase';
 import { CreateCsrDto } from '../dto/create_csr-project.dto';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import { AuthGuard } from '../../../shared/guards/auth.guard';
@@ -28,6 +30,8 @@ export class CsrProjectController {
     private readonly updateCsrProjectUseCase: UpdateCsrProjectUseCase,
     private readonly deleteCsrProjectUseCase: DeleteCsrProjectUseCase,
     private readonly toggleCsrProjectStatusUseCase: ToggleCsrProjectStatusUseCase,
+    private readonly findActivatedCsrProjectsUseCase: FindActivatedCsrProjectsUseCase,
+    private readonly findDeactivatedCsrProjectsUseCase: FindDeactivatedCsrProjectsUseCase,
   ) {}
 
   @Post('create')
@@ -42,6 +46,16 @@ export class CsrProjectController {
   @Get()
   async findAll() {
     return await this.findAllCsrProjectsUseCase.execute();
+  }
+
+  @Get('status/activated')
+  async findActivated() {
+    return await this.findActivatedCsrProjectsUseCase.execute();
+  }
+
+  @Get('status/deactivated')
+  async findDeactivated() {
+    return await this.findDeactivatedCsrProjectsUseCase.execute();
   }
 
   @Get(':id')

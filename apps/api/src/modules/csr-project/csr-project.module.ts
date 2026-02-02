@@ -9,6 +9,8 @@ import { FindAllCsrProjectsUseCase } from './application/find-all-csr-projects.u
 import { UpdateCsrProjectUseCase } from './application/update-csr-project.usecase';
 import { DeleteCsrProjectUseCase } from './application/delete-csr-project.usecase';
 import { ToggleCsrProjectStatusUseCase } from './application/toggle-csr-project-status.usecase';
+import { FindActivatedCsrProjectsUseCase } from './application/find-activated-csr-projects.usecase';
+import { FindDeactivatedCsrProjectsUseCase } from './application/find-deactivated-csr-projects.usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -22,6 +24,8 @@ import { ToggleCsrProjectStatusUseCase } from './application/toggle-csr-project-
     UpdateCsrProjectUseCase,
     DeleteCsrProjectUseCase,
     ToggleCsrProjectStatusUseCase,
+    FindActivatedCsrProjectsUseCase,
+    FindDeactivatedCsrProjectsUseCase,
   ],
   exports: [CsrProjectRepository, CsrProjectService],
 })
