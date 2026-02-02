@@ -282,11 +282,37 @@ export class AuthService {
     const user = await this.userModel.findById(userId).select('-password');
     if (!user) throw new NotFoundException('User not found');
 
-    const userInApi = await axios.get(
-      `http://localhost:3000/api/user/${userId}`,
-    );
-    if (!user) throw new NotFoundException('User not found');
-    return userInApi.data;
+    if (user.role === 'USER') {
+      const userInApi = await axios.get(
+        `http://localhost:3000/api/user/${userId}`,
+      );
+
+      if (!user) throw new NotFoundException('User not found');
+      return userInApi.data;
+    } else if (user.role === 'BUSINESS') {
+      const businessInApi = await axios.get(
+        `http://localhost:3000/api/bussiness/${userId}`,
+      );
+
+      if (!businessInApi) throw new NotFoundException('Business not found');
+      return businessInApi.data;
+    } else if (user.role === 'ORGANIZER') {
+      const organizerInApi = await axios.get(
+        `http://localhost:3000/api/organizer/${userId}`,
+      );
+
+      if (!organizerInApi) throw new NotFoundException('Organizer not found');
+      return organizerInApi.data;
+    } else if (user.role === 'ADMIN') {
+      const adminInApi = await axios.get(
+        `http://localhost:3000/api/admin/${userId}`,
+      );
+
+      if (!adminInApi) throw new NotFoundException('Admin not found');
+      return adminInApi.data;
+    } else {
+      return user;
+    }
   }
 
   /**
