@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OfferRepository } from './offer.repository';
 import { CreateOfferDto } from '../dto/createoffer.dto';
+import { UpdateOfferDto } from '../dto/update-offer.dto';
 
 @Injectable()
 export class OfferService {
@@ -14,7 +15,7 @@ export class OfferService {
     return this.offerRepository.findById(id);
   }
 
-  async update(id: string, data: Partial<CreateOfferDto>) {
+  async update(id: string, data: UpdateOfferDto) {
     return this.offerRepository.update(id, data);
   }
 

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { type DrizzleClient } from '../../../shared/database/drizzle.module';
 import { offers } from './schema/offer.schema';
 import { CreateOfferDto } from '../dto/createoffer.dto';
+import { UpdateOfferDto } from '../dto/update-offer.dto';
 import { eq, lte } from 'drizzle-orm';
 import { UserService } from 'src/modules/user/infrastructure/user.service';
 
@@ -36,7 +37,7 @@ export class OfferRepository {
     return result;
   }
 
-  async update(id: string, data: Partial<CreateOfferDto>) {
+  async update(id: string, data: UpdateOfferDto) {
     const [result] = await this.db
       .update(offers)
       .set(data)

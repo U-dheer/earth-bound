@@ -17,6 +17,7 @@ import { DeleteOfferUseCase } from '../application/delete-offer.usecase';
 import { GetAvailableOffersUseCase } from '../application/get-available-offers.usecase';
 import { GetAllOffersUseCase } from '../application/get-all-offers.usecase';
 import { CreateOfferDto } from '../dto/createoffer.dto';
+import { UpdateOfferDto } from '../dto/update-offer.dto';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 
@@ -57,7 +58,7 @@ export class OfferController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() dto: Partial<CreateOfferDto>) {
+  async update(@Param('id') id: string, @Body() dto: UpdateOfferDto) {
     return await this.updateOfferUseCase.execute(id, dto);
   }
 
