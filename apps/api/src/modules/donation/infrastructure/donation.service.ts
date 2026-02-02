@@ -21,4 +21,8 @@ export class DonationService {
   async delete(id: string) {
     return this.donationRepository.delete(id);
   }
+
+  async getTotalDonationByCsrId(csrId: string) {
+    return this.donationRepository.getTotalDonationByCsrId(csrId);
+  }
 }

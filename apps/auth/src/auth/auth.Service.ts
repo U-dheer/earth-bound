@@ -366,6 +366,31 @@ export class AuthService {
       .select('-password');
   }
 
+  async getAllOrganizersActivated() {
+    return this.userModel
+      .find({ role: 'ORGANIZER', isActive: true })
+      .select('-password');
+  }
+
+  async toggleOrganizerStatus(userId: string) {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException('Organizer not found');
+    }
+    if (user.role !== 'ORGANIZER') {
+      throw new BadRequestException('User is not an organizer');
+    }
+    user.isActive = !user.isActive;
+    await user.save();
+    return {
+      message: `Organizer status toggled to ${user.isActive ? 'active' : 'inactive'}`,
+    };
+  }
+
+  async getAllUsers() {
+    return this.userModel.find({ role: 'USER' }).select('-password');
+  }
+
   async postTheSignUpData(signUpData: CreateUserDto, user: any) {
     console.log('Account number in AuthService:', signUpData.accountNumber);
     signUpData.id = user._id.toString();

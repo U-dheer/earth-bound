@@ -171,6 +171,27 @@ export class AuthController {
     return this.authService.getAllOrganizersNotActivated();
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(RolesEnum.ADMIN)
+  @Get('getAllOrganizers-activated')
+  async getAllOrganizersActivated() {
+    return this.authService.getAllOrganizersActivated();
+  }
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(RolesEnum.ADMIN)
+  @Patch('toggle-organizer-status/:userId')
+  async toggleOrganizerStatus(@Param('userId') userId: string) {
+    return this.authService.toggleOrganizerStatus(userId);
+  }
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(RolesEnum.ADMIN, RolesEnum.ORGANIZER, RolesEnum.BUSINESS)
+  @Get('getAllUsers')
+  async getAllUsers() {
+    return this.authService.getAllUsers();
+  }
+
   @Get('logout')
   @UseGuards(AuthGuard)
   async logout(@RequestUser() userId: string, @Res() res: Response) {

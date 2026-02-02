@@ -8,6 +8,7 @@ import { FindDonationByIdUseCase } from './application/find-donation-by-id.useca
 import { FindAllDonationsUseCase } from './application/find-all-donations.usecase';
 import { UpdateDonationUseCase } from './application/update-donation.usecase';
 import { DeleteDonationUseCase } from './application/delete-donation.usecase';
+import { GetTotalDonationByCsrUseCase } from './application/get-total-donation-by-csr.usecase';
 import { UserModule } from '../user/user.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { UserModule } from '../user/user.module';
     FindAllDonationsUseCase,
     UpdateDonationUseCase,
     DeleteDonationUseCase,
+    GetTotalDonationByCsrUseCase,
   ],
   exports: [DonationService, DonationRepository],
 })

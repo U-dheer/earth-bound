@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { type DrizzleClient } from '../../../shared/database/drizzle.module';
 import { CreateDonationDto } from '../dto/createDonation.dto';
 import { donations } from './schema/donation.schema';
-import { eq } from 'drizzle-orm';
+import { eq, sum } from 'drizzle-orm';
 
 @Injectable()
 export class DonationRepository {
@@ -59,5 +59,15 @@ export class DonationRepository {
       .returning();
 
     return result;
+  }
+
+  async getTotalDonationByCsrId(csrId: string) {
+    const [result] = await this.db
+      .select({ total: sum(donations.amount) })
+      .from(donations)
+      .where(eq(donations.csrId, csrId))
+      .execute();
+
+    return result?.total ? Number(result.total) : 0;
   }
 }
