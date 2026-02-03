@@ -69,4 +69,13 @@ export class CsrProjectRepository {
       .execute();
     return results;
   }
+
+  async findByOrganizerId(organizerId: string) {
+    const results = await this.db
+      .select()
+      .from(csrEvents)
+      .where(eq(csrEvents.organizer_id, organizerId))
+      .execute();
+    return results;
+  }
 }

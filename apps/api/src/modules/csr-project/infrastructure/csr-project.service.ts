@@ -33,4 +33,8 @@ export class CsrProjectService {
   async findByActivationStatus(isApproved: boolean) {
     return this.csrProjectRepository.findByActivationStatus(isApproved);
   }
+
+  async findByOrganizerId(organizerId: string) {
+    return this.csrProjectRepository.findByOrganizerId(organizerId);
+  }
 }
