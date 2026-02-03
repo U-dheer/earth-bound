@@ -146,6 +146,7 @@ const serviceRoutes: ServiceRouteConfig[] = [
       { path: '/csr-project', methods: ['GET'], isPublic: true },
 
       // ----- Donation routes -----
+      { path: '/donation/total', allowedRoles: [UserRole.ADMIN] },
       { path: '/donation', allowedRoles: undefined }, // All authenticated
 
       // ----- User-specific routes -----
