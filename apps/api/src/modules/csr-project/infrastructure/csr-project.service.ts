@@ -37,4 +37,10 @@ export class CsrProjectService {
   async findByOrganizerId(organizerId: string) {
     return this.csrProjectRepository.findByOrganizerId(organizerId);
   }
+
+  async findByOrganizerIdWithTotalDonations(organizerId: string) {
+    return this.csrProjectRepository.findByOrganizerIdWithTotalDonations(
+      organizerId,
+    );
+  }
 }

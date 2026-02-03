@@ -17,6 +17,7 @@ import { ToggleCsrProjectStatusUseCase } from '../application/toggle-csr-project
 import { FindActivatedCsrProjectsUseCase } from '../application/find-activated-csr-projects.usecase';
 import { FindDeactivatedCsrProjectsUseCase } from '../application/find-deactivated-csr-projects.usecase';
 import { FindCsrProjectsByOrganizerUseCase } from '../application/find-csr-projects-by-organizer.usecase';
+import { FindOrganizerProjectsWithDonationsUseCase } from '../application/find-organizer-projects-with-donations.usecase';
 import { CreateCsrDto } from '../dto/create_csr-project.dto';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
 import { AuthGuard } from '../../../shared/guards/auth.guard';
@@ -34,6 +35,7 @@ export class CsrProjectController {
     private readonly findActivatedCsrProjectsUseCase: FindActivatedCsrProjectsUseCase,
     private readonly findDeactivatedCsrProjectsUseCase: FindDeactivatedCsrProjectsUseCase,
     private readonly findCsrProjectsByOrganizerUseCase: FindCsrProjectsByOrganizerUseCase,
+    private readonly findOrganizerProjectsWithDonationsUseCase: FindOrganizerProjectsWithDonationsUseCase,
   ) {}
 
   @Post('create')
@@ -63,6 +65,15 @@ export class CsrProjectController {
   @Get('my-projects')
   async findMyProjects(@CurrentUser('userId') organizerId: string) {
     return await this.findCsrProjectsByOrganizerUseCase.execute(organizerId);
+  }
+
+  @Get('my-projects/with-donations')
+  async findMyProjectsWithDonations(
+    @CurrentUser('userId') organizerId: string,
+  ) {
+    return await this.findOrganizerProjectsWithDonationsUseCase.execute(
+      organizerId,
+    );
   }
 
   @Get(':id')

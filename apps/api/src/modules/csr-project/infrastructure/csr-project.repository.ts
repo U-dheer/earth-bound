@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { type DrizzleClient } from '../../../shared/database/drizzle.module';
 import { csrEvents } from './schema/csr.event.schema';
+import { donations } from '../../donation/infrastructure/schema/donation.schema';
 import { CreateCsrDto } from '../dto/create_csr-project.dto';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 @Injectable()
 export class CsrProjectRepository {
@@ -75,6 +76,31 @@ export class CsrProjectRepository {
       .select()
       .from(csrEvents)
       .where(eq(csrEvents.organizer_id, organizerId))
+      .execute();
+    return results;
+  }
+
+  async findByOrganizerIdWithTotalDonations(organizerId: string) {
+    const results = await this.db
+      .select({
+        id: csrEvents.id,
+        name: csrEvents.name,
+        description: csrEvents.description,
+        startDate: csrEvents.startDate,
+        endDate: csrEvents.endDate,
+        location: csrEvents.location,
+        isApproved: csrEvents.isApproved,
+        organizer_id: csrEvents.organizer_id,
+        createdAt: csrEvents.createdAt,
+        updatedAt: csrEvents.updatedAt,
+        totalDonations: sql<number>`COALESCE(SUM(${donations.amount}), 0)`.as(
+          'total_donations',
+        ),
+      })
+      .from(csrEvents)
+      .leftJoin(donations, eq(csrEvents.id, donations.csrId))
+      .where(eq(csrEvents.organizer_id, organizerId))
+      .groupBy(csrEvents.id)
       .execute();
     return results;
   }

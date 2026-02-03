@@ -12,6 +12,7 @@ import { ToggleCsrProjectStatusUseCase } from './application/toggle-csr-project-
 import { FindActivatedCsrProjectsUseCase } from './application/find-activated-csr-projects.usecase';
 import { FindDeactivatedCsrProjectsUseCase } from './application/find-deactivated-csr-projects.usecase';
 import { FindCsrProjectsByOrganizerUseCase } from './application/find-csr-projects-by-organizer.usecase';
+import { FindOrganizerProjectsWithDonationsUseCase } from './application/find-organizer-projects-with-donations.usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -28,6 +29,7 @@ import { FindCsrProjectsByOrganizerUseCase } from './application/find-csr-projec
     FindActivatedCsrProjectsUseCase,
     FindDeactivatedCsrProjectsUseCase,
     FindCsrProjectsByOrganizerUseCase,
+    FindOrganizerProjectsWithDonationsUseCase,
   ],
   exports: [CsrProjectRepository, CsrProjectService],
 })
