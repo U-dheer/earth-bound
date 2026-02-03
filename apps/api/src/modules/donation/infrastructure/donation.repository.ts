@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { type DrizzleClient } from '../../../shared/database/drizzle.module';
 import { CreateDonationDto } from '../dto/createDonation.dto';
 import { donations } from './schema/donation.schema';
+import { csrEvents } from 'src/modules/csr-project/infrastructure/schema/csr.event.schema';
 import { eq, sum } from 'drizzle-orm';
 
 @Injectable()
@@ -69,5 +70,27 @@ export class DonationRepository {
       .execute();
 
     return result?.total ? Number(result.total) : 0;
+  }
+
+  async getAllCsrProjectsWithDonationTotals() {
+    const results = await this.db
+      .select({
+        csrId: csrEvents.id,
+        name: csrEvents.name,
+        description: csrEvents.description,
+        startDate: csrEvents.startDate,
+        endDate: csrEvents.endDate,
+        isApproved: csrEvents.isApproved,
+        totalAmount: sum(donations.amount),
+      })
+      .from(csrEvents)
+      .leftJoin(donations, eq(csrEvents.id, donations.csrId))
+      .groupBy(csrEvents.id)
+      .execute();
+
+    return results.map((result) => ({
+      ...result,
+      totalAmount: result.totalAmount ? Number(result.totalAmount) : 0,
+    }));
   }
 }

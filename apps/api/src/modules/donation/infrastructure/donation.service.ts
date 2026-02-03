@@ -25,4 +25,8 @@ export class DonationService {
   async getTotalDonationByCsrId(csrId: string) {
     return this.donationRepository.getTotalDonationByCsrId(csrId);
   }
+
+  async getAllCsrProjectsWithDonationTotals() {
+    return this.donationRepository.getAllCsrProjectsWithDonationTotals();
+  }
 }

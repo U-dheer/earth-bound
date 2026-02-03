@@ -13,6 +13,7 @@ import { FindAllDonationsUseCase } from '../application/find-all-donations.useca
 import { UpdateDonationUseCase } from '../application/update-donation.usecase';
 import { DeleteDonationUseCase } from '../application/delete-donation.usecase';
 import { GetTotalDonationByCsrUseCase } from '../application/get-total-donation-by-csr.usecase';
+import { GetAllCsrDonationTotalsUseCase } from '../application/get-all-csr-donation-totals.usecase';
 import { CreateDonationDto } from '../dto/createDonation.dto';
 
 @Controller('donation')
@@ -24,6 +25,7 @@ export class DonationController {
     private readonly updateDonationUseCase: UpdateDonationUseCase,
     private readonly deleteDonationUseCase: DeleteDonationUseCase,
     private readonly getTotalDonationByCsrUseCase: GetTotalDonationByCsrUseCase,
+    private readonly getAllCsrDonationTotalsUseCase: GetAllCsrDonationTotalsUseCase,
   ) {}
 
   @Post('create/:id')
@@ -37,6 +39,11 @@ export class DonationController {
   @Get()
   async findAll() {
     return await this.findAllDonationsUseCase.execute();
+  }
+
+  @Get('total')
+  async getAllCsrTotals() {
+    return await this.getAllCsrDonationTotalsUseCase.execute();
   }
 
   @Get('total/:csrId')
