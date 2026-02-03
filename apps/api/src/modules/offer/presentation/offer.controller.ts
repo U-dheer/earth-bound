@@ -39,6 +39,7 @@ export class OfferController {
   }
 
   @Post('create')
+  @UseGuards(AuthGuard)
   async createOffer(
     @Body() dto: CreateOfferDto,
     @CurrentUser('userId') userId: any,
