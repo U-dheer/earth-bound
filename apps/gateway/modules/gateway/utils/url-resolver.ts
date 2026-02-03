@@ -128,6 +128,7 @@ const serviceRoutes: ServiceRouteConfig[] = [
         methods: ['GET'],
         isPublic: true,
       },
+      { path: '/user-offers/redeem', allowedRoles: [UserRole.BUSINESS] },
       {
         path: '/business',
         allowedRoles: [UserRole.ADMIN, UserRole.BUSINESS],

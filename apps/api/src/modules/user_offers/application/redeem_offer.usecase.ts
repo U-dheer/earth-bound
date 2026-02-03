@@ -31,6 +31,7 @@ export class RedeemOfferUseCase {
       }
 
       const discountAmount = (validOffer.discountPercentage / 100) * totalBill;
+      const billAfterDiscount = totalBill - discountAmount;
       const reduceebleRedeemPoints = await generateRedeemPoints(discountAmount);
 
       const user = await this.userService.findUserById(userId);
@@ -56,6 +57,7 @@ export class RedeemOfferUseCase {
       return {
         'offer redeemed': validOffer.offerCode,
         'discount amount': discountAmount,
+        'bill after discount': billAfterDiscount,
         'redeem points used': reduceebleRedeemPoints,
         'remaining redeem points': updatedRedeemPoints,
       };
