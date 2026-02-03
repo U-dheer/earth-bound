@@ -197,6 +197,8 @@ export class AuthService {
     }
 
     const isMatch = await bcrypt.compare(oldPassword, user.password);
+    console.log(oldPassword, user.password);
+    console.log('Old password match:', isMatch);
     if (!isMatch) {
       throw new BadRequestException('Old password is incorrect');
     }

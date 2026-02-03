@@ -72,6 +72,7 @@ const serviceRoutes: ServiceRouteConfig[] = [
       { path: '/forgot-password', isPublic: true },
       { path: '/reset-password', isPublic: true },
       { path: '/verify-email', isPublic: true },
+      { path: '/validate', isPublic: true },
 
       // Protected routes
       { path: '/profile', allowedRoles: undefined }, // All authenticated

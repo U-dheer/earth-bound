@@ -59,15 +59,17 @@ export class OfferRepository {
   async getAvailableOffers(userId: any) {
     console.log('userId', userId);
     const userData = await this.userService.findUserById(userId);
+
+    console.log('userData', userData);
     if (!userData) {
       throw new Error('User not found');
     }
-    const [avilableOffers] = await this.db
+    const avilableOffers = await this.db
       .select()
       .from(offers)
       .where(lte(offers.redeemamountForGetTheOffer, userData.redeemPoints))
       .execute();
-    return [avilableOffers];
+    return avilableOffers;
   }
 
   async getAllOffers() {
