@@ -14,7 +14,9 @@ import { UpdateDonationUseCase } from '../application/update-donation.usecase';
 import { DeleteDonationUseCase } from '../application/delete-donation.usecase';
 import { GetTotalDonationByCsrUseCase } from '../application/get-total-donation-by-csr.usecase';
 import { GetAllCsrDonationTotalsUseCase } from '../application/get-all-csr-donation-totals.usecase';
+import { GetUserDonationHistoryUseCase } from '../application/get-user-donation-history.usecase';
 import { CreateDonationDto } from '../dto/createDonation.dto';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 
 @Controller('donation')
 export class DonationController {
@@ -26,6 +28,7 @@ export class DonationController {
     private readonly deleteDonationUseCase: DeleteDonationUseCase,
     private readonly getTotalDonationByCsrUseCase: GetTotalDonationByCsrUseCase,
     private readonly getAllCsrDonationTotalsUseCase: GetAllCsrDonationTotalsUseCase,
+    private readonly getUserDonationHistoryUseCase: GetUserDonationHistoryUseCase,
   ) {}
 
   @Post('create/:id')
@@ -39,6 +42,11 @@ export class DonationController {
   @Get()
   async findAll() {
     return await this.findAllDonationsUseCase.execute();
+  }
+
+  @Get('my-history')
+  async getMyDonationHistory(@CurrentUser('userId') userId: string) {
+    return await this.getUserDonationHistoryUseCase.execute(userId);
   }
 
   @Get('total')

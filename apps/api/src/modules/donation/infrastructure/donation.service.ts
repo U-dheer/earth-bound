@@ -14,6 +14,10 @@ export class DonationService {
     return this.donationRepository.findById(id);
   }
 
+  async findByUserId(userId: string) {
+    return this.donationRepository.findByUserId(userId);
+  }
+
   async update(id: string, data: Partial<CreateDonationDto>) {
     return this.donationRepository.update(id, data);
   }

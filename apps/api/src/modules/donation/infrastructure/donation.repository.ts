@@ -43,6 +43,16 @@ export class DonationRepository {
     return result;
   }
 
+  async findByUserId(userId: string) {
+    const result = await this.db
+      .select()
+      .from(donations)
+      .where(eq(donations.userId, userId))
+      .execute();
+
+    return result;
+  }
+
   async update(id: string, data: Partial<CreateDonationDto>) {
     const [result] = await this.db
       .update(donations)
