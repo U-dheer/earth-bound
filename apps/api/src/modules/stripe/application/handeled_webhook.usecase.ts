@@ -8,10 +8,9 @@ export class HandeledWebhookUsecase {
 
   async execute(event: Stripe.Event) {
     try {
-      if (
-        event.type === 'checkout.session.completed' ||
-        event.type === 'payment_intent.created'
-      ) {
+      // Only handle checkout.session.completed to avoid duplicate donations
+      // payment_intent.created fires before payment is confirmed
+      if (event.type === 'checkout.session.completed') {
         const eventObject = event.data.object;
 
         console.log(`${event.type} event received:`, eventObject);
