@@ -30,4 +30,8 @@ export class OfferService {
   async getAllOffers() {
     return this.offerRepository.getAllOffers();
   }
+
+  async getOffersByCreator(userId: string) {
+    return this.offerRepository.getOffersByCreator(userId);
+  }
 }

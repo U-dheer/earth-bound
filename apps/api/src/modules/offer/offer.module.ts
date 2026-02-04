@@ -9,6 +9,7 @@ import { UpdateOfferUseCase } from './application/update-offer.usecase';
 import { DeleteOfferUseCase } from './application/delete-offer.usecase';
 import { GetAvailableOffersUseCase } from './application/get-available-offers.usecase';
 import { GetAllOffersUseCase } from './application/get-all-offers.usecase';
+import { GetMyOffersUseCase } from './application/get-my-offers.usecase';
 import { UserService } from '../user/infrastructure/user.service';
 import { UserModule } from '../user/user.module';
 
@@ -24,6 +25,7 @@ import { UserModule } from '../user/user.module';
     DeleteOfferUseCase,
     GetAvailableOffersUseCase,
     GetAllOffersUseCase,
+    GetMyOffersUseCase,
   ],
   exports: [OfferService, OfferRepository],
 })

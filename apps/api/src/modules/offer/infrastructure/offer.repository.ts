@@ -76,4 +76,13 @@ export class OfferRepository {
     const allOffers = await this.db.select().from(offers).execute();
     return allOffers;
   }
+
+  async getOffersByCreator(userId: string) {
+    const userOffers = await this.db
+      .select()
+      .from(offers)
+      .where(eq(offers.bussinessId, userId))
+      .execute();
+    return userOffers;
+  }
 }
