@@ -8,8 +8,6 @@ export class HandeledWebhookUsecase {
 
   async execute(event: Stripe.Event) {
     try {
-      // Only handle checkout.session.completed to avoid duplicate donations
-      // payment_intent.created fires before payment is confirmed
       if (event.type === 'checkout.session.completed') {
         const eventObject = event.data.object;
 
@@ -32,11 +30,14 @@ export class HandeledWebhookUsecase {
           csrId: projectId,
           amount: amount,
         });
+
+        console.log('Donation created successfully');
       } else {
         console.log(`Unhandled event type: ${event.type}`);
         return;
       }
     } catch (error) {
+      console.error('Webhook error details:', error);
       throw new BadRequestException(
         error instanceof Error ? error.message : 'Failed to handle webhook',
       );
